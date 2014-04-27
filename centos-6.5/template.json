@@ -43,12 +43,12 @@
         "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
       ],
       "boot_wait": "10s",
-      "disk_size": 40520,
+      "disk_size": 20480,
       "guest_os_type": "RedHat_64",
       "http_directory": "http",
       "iso_checksum": "f21a71e8e31df73297bdd1ccd4a64a36831284bd",
       "iso_checksum_type": "sha1",
-      "iso_url": "http://ftp.iij.ad.jp/pub/linux/centos/6.5/isos/x86_64/CentOS-6.5-x86_64-minimal.iso",
+      "iso_url": "http://reflector.westga.edu/repos/CentOS/6.5/isos/x86_64/CentOS-6.5-x86_64-minimal.iso",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -57,7 +57,7 @@
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "virtualbox_version_file": ".vbox_version",
       "vboxmanage": [
-        [ "modifyvm", "{{.Name}}", "--memory", "512" ],
+        [ "modifyvm", "{{.Name}}", "--memory", "1024" ],
         [ "modifyvm", "{{.Name}}", "--cpus", "1" ]
       ]
     },
@@ -67,12 +67,12 @@
         "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
       ],
       "boot_wait": "10s",
-      "disk_size": 40520,
+      "disk_size": 20480,
       "guest_os_type": "centos-64",
       "http_directory": "http",
       "iso_checksum": "f21a71e8e31df73297bdd1ccd4a64a36831284bd",
       "iso_checksum_type": "sha1",
-      "iso_url": "http://ftp.iij.ad.jp/pub/linux/centos/6.5/isos/x86_64/CentOS-6.5-x86_64-minimal.iso",
+      "iso_url": "http://reflector.westga.edu/repos/CentOS/6.5/isos/x86_64/CentOS-6.5-x86_64-minimal.iso",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -80,7 +80,7 @@
       "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'",
       "tools_upload_flavor": "linux",
       "vmx_data": {
-        "memsize": "512",
+        "memsize": "1024",
         "numvcpus": "1",
         "cpuid.coresPerSocket": "1"
       }
