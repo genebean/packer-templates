@@ -1,3 +1,3 @@
 sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
-yum -y install gcc make gcc-c++ kernel-devel-`uname -r` perl
+yum -y install binutils gcc gcc-c++ kernel-devel-`uname -r` make perl
 
