@@ -7,6 +7,7 @@
         "virtualbox-iso": {
           "scripts": [
             "scripts/base.sh",
+            "scripts/epel.sh",
             "scripts/vagrant.sh",
             "scripts/virtualbox.sh",
             "scripts/cleanup.sh"
@@ -15,6 +16,7 @@
         "vmware-iso": {
           "scripts": [
             "scripts/base.sh",
+            "scripts/epel.sh",
             "scripts/vagrant.sh",
             "scripts/vmware.sh",
             "scripts/cleanup.sh"
