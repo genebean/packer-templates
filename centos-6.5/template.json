@@ -84,7 +84,7 @@
       "vmx_data": {
         "memsize": "1024",
         "numvcpus": "1",
-        "cpuid.coresPerSocket": "1"
+        "cpuid.coresPerSocket": "1",
         "virtualHW.version": "10"
       }
     }
