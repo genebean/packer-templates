@@ -1,8 +1,9 @@
 ==========================
-shiguredo-packer-templates
+genebean-packer-templates
 ==========================
 
 Packer templates for building base VM boxes.
+My modifications are in the "genebean" branch.
 
 Usage
 =====
@@ -27,8 +28,8 @@ Running Packer
 
 ::
 
-    $ git clone https://github.com/shiguredo/packer-templates
-    $ cd packer-templates
+    $ git clone https://github.com/genebean/packer-templates.git
+    $ cd some-distribution-folder
     $ packer build template.json
 
 
