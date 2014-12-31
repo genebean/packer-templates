@@ -7,6 +7,7 @@
         "virtualbox-iso": {
           "scripts": [
             "scripts/base.sh",
+            "scripts/epel.sh",
             "scripts/vagrant.sh",
             "scripts/virtualbox.sh",
             "scripts/cleanup.sh"
@@ -15,6 +16,7 @@
         "vmware-iso": {
           "scripts": [
             "scripts/base.sh",
+            "scripts/epel.sh",
             "scripts/vagrant.sh",
             "scripts/vmware.sh",
             "scripts/cleanup.sh"
@@ -48,7 +50,7 @@
       "http_directory": "http",
       "iso_checksum": "4ed6c56d365bd3ab12cd88b8a480f4a62e7c66d2",
       "iso_checksum_type": "sha1",
-      "iso_url": "http://ftp.iij.ad.jp/pub/linux/centos/6.6/isos/x86_64/CentOS-6.6-x86_64-minimal.iso",
+      "iso_url": "http://reflector.westga.edu/repos/CentOS/6.6/isos/x86_64/CentOS-6.6-x86_64-minimal.iso",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -57,7 +59,7 @@
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "virtualbox_version_file": ".vbox_version",
       "vboxmanage": [
-        [ "modifyvm", "{{.Name}}", "--memory", "512" ],
+        [ "modifyvm", "{{.Name}}", "--memory", "1024" ],
         [ "modifyvm", "{{.Name}}", "--cpus", "1" ]
       ]
     },
@@ -68,11 +70,11 @@
       ],
       "boot_wait": "10s",
       "disk_size": 40520,
-      "guest_os_type": "RedHat_64",
+      "guest_os_type": "centos-64",
       "http_directory": "http",
       "iso_checksum": "4ed6c56d365bd3ab12cd88b8a480f4a62e7c66d2",
       "iso_checksum_type": "sha1",
-      "iso_url": "http://ftp.iij.ad.jp/pub/linux/centos/6.6/isos/x86_64/CentOS-6.6-x86_64-minimal.iso",
+      "iso_url": "http://reflector.westga.edu/repos/CentOS/6.6/isos/x86_64/CentOS-6.6-x86_64-minimal.iso",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -80,9 +82,10 @@
       "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'",
       "tools_upload_flavor": "linux",
       "vmx_data": {
-        "memsize": "512",
+        "memsize": "1024",
         "numvcpus": "1",
-        "cpuid.coresPerSocket": "1"
+        "cpuid.coresPerSocket": "1",
+        "virtualHW.version": "10"
       }
     }
   ]
