@@ -1,9 +1,12 @@
 {
+  "variables": {
+    "os": "centos-6"
+  },
   "builders": [
     {
-      "name": "virtualbox-vagrant-puppet",
+      "name": "virtualbox-vagrant-puppet-{{user `os`}}",
       "type": "virtualbox-ovf",
-      "source_path": "output-virtualbox-base/packer-virtualbox-base.ovf",
+      "source_path": "output-virtualbox-base-{{user `os`}}/packer-virtualbox-base-{{user `os`}}.ovf",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -11,9 +14,9 @@
       "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'"
     },
     {
-      "name": "vmware-vagrant-puppet",
+      "name": "vmware-vagrant-puppet-{{user `os`}}",
       "type": "vmware-vmx",
-      "source_path": "output-vmware-base/packer-vmware-base.vmx",
+      "source_path": "output-vmware-base-{{user `os`}}/packer-vmware-base-{{user `os`}}.vmx",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -26,13 +29,13 @@
       "type": "shell",
       "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'",
       "override": {
-        "virtualbox-vagrant-puppet": {
+        "virtualbox-vagrant-puppet-{{user `os`}}": {
           "scripts": [
             "scripts/puppet.sh",
             "scripts/cleanup.sh"
           ]
         },
-        "vmware-vagrant-puppet": {
+        "vmware-vagrant-puppet-{{user `os`}}": {
           "scripts": [
             "scripts/puppet.sh",
             "scripts/cleanup.sh"
@@ -46,10 +49,10 @@
       "type": "vagrant",
       "override": {
         "virtualbox": {
-          "output": "boxes/centos-6-puppet-virtualbox.box"
+          "output": "boxes/{{user `os`}}-puppet-virtualbox.box"
         },
         "vmware": {
-          "output": "boxes/centos-6-puppet-vmware.box"
+          "output": "boxes/{{user `os`}}-puppet-vmware.box"
         }
       }
     }

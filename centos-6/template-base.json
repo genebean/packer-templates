@@ -1,13 +1,18 @@
 {
+  "variables": {
+    "os": "centos-6"
+  },
   "builders": [
     {
-      "name": "virtualbox-base",
+      "name": "virtualbox-base-{{user `os`}}",
       "type": "virtualbox-iso",
-      "vm_name": "packer-virtualbox-base",
+      "vm_name": "packer-virtualbox-base-{{user `os`}}",
       "boot_command": [
-        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg vga=791",
+        "<tab>",
         "<wait5>",
-        "<enter>"
+        " quiet vga=791",
+        " text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg",
+        "<wait5><enter>"
       ],
       "boot_wait": "10s",
       "disk_size": 40520,
@@ -29,13 +34,15 @@
       ]
     },
     {
-      "name": "vmware-base",
+      "name": "vmware-base-{{user `os`}}",
       "type": "vmware-iso",
-      "vm_name": "packer-vmware-base",
+      "vm_name": "packer-vmware-base-{{user `os`}}",
       "boot_command": [
-        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg vga=791",
+        "<tab>",
         "<wait5>",
-        "<enter>"
+        "quiet vga=791",
+        " text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg",
+        "<wait5><enter>"
       ],
       "boot_wait": "10s",
       "disk_size": 40520,
@@ -53,8 +60,7 @@
       "vmx_data": {
         "memsize": "1024",
         "numvcpus": "1",
-        "cpuid.coresPerSocket": "1",
-        "virtualHW.version": "10"
+        "cpuid.coresPerSocket": "1"
       }
     }
   ],
@@ -63,7 +69,7 @@
       "type": "shell",
       "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'",
       "override": {
-        "virtualbox-base": {
+        "virtualbox-base-{{user `os`}}": {
           "scripts": [
             "scripts/base.sh",
             "scripts/epel.sh",
@@ -72,7 +78,7 @@
             "scripts/cleanup.sh"
           ]
         },
-        "vmware-base": {
+        "vmware-base-{{user `os`}}": {
           "scripts": [
             "scripts/base.sh",
             "scripts/epel.sh",

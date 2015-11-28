@@ -1,9 +1,12 @@
 {
+  "variables": {
+    "os": "centos-6"
+  },
   "builders": [
     {
-      "name": "virtualbox-vagrant-nocm",
+      "name": "virtualbox-vagrant-nocm-{{user `os`}}",
       "type": "virtualbox-ovf",
-      "source_path": "output-virtualbox-base/packer-virtualbox-base.ovf",
+      "source_path": "output-virtualbox-base-{{user `os`}}/packer-virtualbox-base-{{user `os`}}.ovf",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -11,9 +14,9 @@
       "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'"
     },
     {
-      "name": "vmware-vagrant-nocm",
+      "name": "vmware-vagrant-nocm-{{user `os`}}",
       "type": "vmware-vmx",
-      "source_path": "output-vmware-base/packer-vmware-base.vmx",
+      "source_path": "output-vmware-base-{{user `os`}}/packer-vmware-base-{{user `os`}}.vmx",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -26,12 +29,12 @@
       "type": "shell",
       "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'",
       "override": {
-        "virtualbox-vagrant-nocm": {
+        "virtualbox-vagrant-nocm-{{user `os`}}": {
           "scripts": [
             "scripts/cleanup.sh"
           ]
         },
-        "vmware-vagrant-nocm": {
+        "vmware-vagrant-nocm-{{user `os`}}": {
           "scripts": [
             "scripts/cleanup.sh"
           ]
@@ -44,10 +47,10 @@
       "type": "vagrant",
       "override": {
         "virtualbox": {
-          "output": "boxes/centos-6-nocm-virtualbox.box"
+          "output": "boxes/{{user `os`}}-nocm-virtualbox.box"
         },
         "vmware": {
-          "output": "boxes/centos-6-nocm-vmware.box"
+          "output": "boxes/{{user `os`}}-nocm-vmware.box"
         }
       }
     }
