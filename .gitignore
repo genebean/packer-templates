@@ -1,4 +1,6 @@
-packer_cache
+*/boxes/
+*/output-*/
+*/packer_cache/
 *.box
-output-*
 *.bak
+
