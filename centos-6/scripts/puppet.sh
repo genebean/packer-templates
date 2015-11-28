@@ -59,4 +59,3 @@ EOF
 echo 'Testing the MOTD...'
 echo
 cat /etc/motd
-
