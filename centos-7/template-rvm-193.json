@@ -4,7 +4,7 @@
   },
   "builders": [
     {
-      "name": "virtualbox-vagrant-puppet-agent-{{user `os`}}",
+      "name": "virtualbox-vagrant-rvm-193-{{user `os`}}",
       "type": "virtualbox-ovf",
       "source_path": "output-virtualbox-base-{{user `os`}}/packer-virtualbox-base-{{user `os`}}.ovf",
       "ssh_username": "vagrant",
@@ -14,7 +14,7 @@
       "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'"
     },
     {
-      "name": "vmware-vagrant-puppet-agent-{{user `os`}}",
+      "name": "vmware-vagrant-rvm-193-{{user `os`}}",
       "type": "vmware-vmx",
       "source_path": "output-vmware-base-{{user `os`}}/packer-vmware-base-{{user `os`}}.vmx",
       "ssh_username": "vagrant",
@@ -29,15 +29,15 @@
       "type": "shell",
       "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'",
       "override": {
-        "virtualbox-vagrant-puppet-agent-{{user `os`}}": {
+        "virtualbox-vagrant-rvm-193-{{user `os`}}": {
           "scripts": [
-            "scripts/puppet-agent.sh",
+            "scripts/rvm-193.sh",
             "scripts/cleanup.sh"
           ]
         },
-        "vmware-vagrant-puppet-agent-{{user `os`}}": {
+        "vmware-vagrant-rvm-193-{{user `os`}}": {
           "scripts": [
-            "scripts/puppet-agent.sh",
+            "scripts/rvm-193.sh",
             "scripts/cleanup.sh"
           ]
         }
@@ -49,10 +49,10 @@
       "type": "vagrant",
       "override": {
         "virtualbox": {
-          "output": "boxes/{{user `os`}}-puppet-agent-virtualbox.box"
+          "output": "boxes/{{user `os`}}-rvm-193-virtualbox.box"
         },
         "vmware": {
-          "output": "boxes/{{user `os`}}-puppet-agent-vmware.box"
+          "output": "boxes/{{user `os`}}-rvm-193-vmware.box"
         }
       }
     }
