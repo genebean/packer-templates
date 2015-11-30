@@ -1,6 +1,4 @@
-if [ ! -f "/.dockerinit" ]; then
-  sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
-fi
+sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
 
 yum -y install yum-presto ntpdate
 
