@@ -99,11 +99,13 @@
     {
       "type": "shell",
       "only": [ "virtualbox-{{user `build_name`}}-{{user `os`}}" ],
+      "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'",
       "script": "scripts/virtualbox.sh"
     },
     {
       "type": "shell",
       "only": [ "vmware-{{user `build_name`}}-{{user `os`}}" ],
+      "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'",
       "script": "scripts/vmware.sh"
     },
     {
@@ -122,6 +124,7 @@
   "post-processors": [
     {
       "type": "docker-import",
+      "only": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
       "repository": "{{user `docker_user`}}/{{user `os`}}-{{user `build_name`}}"
     }
   ]
