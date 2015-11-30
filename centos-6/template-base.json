@@ -65,6 +65,7 @@
       }
     },
     {
+      "name": "docker-base-{{user `os`}}",
       "type": "docker",
       "image": "{{user `docker_image`}}",
       "pull": true,
@@ -109,6 +110,12 @@
           "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
         }
       }
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "docker-import",
+      "repository": "genebean/docker-base-{{user `os`}}"
     }
   ]
 }
