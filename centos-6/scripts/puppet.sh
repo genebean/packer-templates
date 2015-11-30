@@ -3,7 +3,7 @@
 # Puppet Agent
 yum install -y http://reflector.westga.edu/repos/PuppetLabs/yum/puppetlabs-release-el-6.noarch.rpm
 yum -y install puppet
-puppet resource service puppet ensure=stopped enable=false
+puppet resource service puppet ensure=stopped enable=false || exit 1
 
 cat > /etc/puppet/puppet.conf << EOF
 [main]
