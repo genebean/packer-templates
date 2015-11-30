@@ -1,7 +1,8 @@
 {
   "variables": {
     "os": "centos-6",
-    "docker_image": "centos:centos6"
+    "docker_image": "centos:centos6",
+    "docker_user": "genebean"
   },
   "builders": [
     {
@@ -115,7 +116,7 @@
   "post-processors": [
     {
       "type": "docker-import",
-      "repository": "genebean/docker-base-{{user `os`}}"
+      "repository": "{{user `docker_user`}}/{{user `os`}}-base"
     }
   ]
 }
