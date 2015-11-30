@@ -2,11 +2,12 @@
   "variables": {
     "os": "centos-6",
     "docker_image": "genebean/centos-6-base",
-    "docker_user": "genebean"
+    "docker_user": "genebean",
+    "build_name": "nocm"
   },
   "builders": [
     {
-      "name": "virtualbox-vagrant-nocm-{{user `os`}}",
+      "name": "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}",
       "type": "virtualbox-ovf",
       "source_path": "output-virtualbox-base-{{user `os`}}/packer-virtualbox-base-{{user `os`}}.ovf",
       "ssh_username": "vagrant",
@@ -16,7 +17,7 @@
       "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'"
     },
     {
-      "name": "vmware-vagrant-nocm-{{user `os`}}",
+      "name": "vmware-vagrant-{{user `build_name`}}-{{user `os`}}",
       "type": "vmware-vmx",
       "source_path": "output-vmware-base-{{user `os`}}/packer-vmware-base-{{user `os`}}.vmx",
       "ssh_username": "vagrant",
@@ -26,11 +27,11 @@
       "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'"
     },
     {
-      "name": "docker-nocm-{{user `os`}}",
+      "name": "docker-{{user `build_name`}}-{{user `os`}}",
       "type": "docker",
       "image": "{{user `docker_image`}}",
       "pull": false,
-      "export_path": "packer-docker-nocm-{{user `os`}}.tar"
+      "export_path": "packer-docker-{{user `build_name`}}-{{user `os`}}.tar"
     }
   ],
   "provisioners": [
@@ -38,10 +39,10 @@
       "type": "shell",
       "script": "scripts/cleanup.sh",
       "override": {
-        "virtualbox-vagrant-nocm-{{user `os`}}": {
+        "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}": {
           "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
         },
-        "vmware-vagrant-nocm-{{user `os`}}": {
+        "vmware-vagrant-{{user `build_name`}}-{{user `os`}}": {
           "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
         }
       }
@@ -50,18 +51,20 @@
   "post-processors": [
     {
       "type": "vagrant",
+      "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
       "override": {
         "virtualbox": {
-          "output": "boxes/{{user `os`}}-nocm-virtualbox.box"
+          "output": "boxes/{{user `os`}}-{{user `build_name`}}-virtualbox.box"
         },
         "vmware": {
-          "output": "boxes/{{user `os`}}-nocm-vmware.box"
+          "output": "boxes/{{user `os`}}-{{user `build_name`}}-vmware.box"
         }
       }
     },
     {
       "type": "docker-import",
-      "repository": "{{user `docker_user`}}/{{user `os`}}-nocm"
+      "only": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
+      "repository": "{{user `docker_user`}}/{{user `os`}}-{{user `build_name`}}"
     }
   ]
 }
