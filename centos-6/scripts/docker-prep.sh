@@ -1,4 +1,4 @@
-yum -y install passwd sudo which tar
+yum -y install openssh-server passwd sudo tar which
 
 /usr/sbin/groupadd vagrant
 /usr/sbin/useradd vagrant -g vagrant -G wheel
