@@ -1,10 +1,13 @@
 {
   "variables": {
-    "os": "centos-6"
+    "os": "centos-6",
+    "docker_image": "genebean/centos-6-base",
+    "docker_user": "genebean",
+    "build_name": "rvm-193"
   },
   "builders": [
     {
-      "name": "virtualbox-vagrant-rvm-193-{{user `os`}}",
+      "name": "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}",
       "type": "virtualbox-ovf",
       "source_path": "output-virtualbox-base-{{user `os`}}/packer-virtualbox-base-{{user `os`}}.ovf",
       "ssh_username": "vagrant",
@@ -14,7 +17,7 @@
       "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'"
     },
     {
-      "name": "vmware-vagrant-rvm-193-{{user `os`}}",
+      "name": "vmware-vagrant-{{user `build_name`}}-{{user `os`}}",
       "type": "vmware-vmx",
       "source_path": "output-vmware-base-{{user `os`}}/packer-vmware-base-{{user `os`}}.vmx",
       "ssh_username": "vagrant",
@@ -22,24 +25,28 @@
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
       "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'"
+    },
+    {
+      "name": "docker-{{user `build_name`}}-{{user `os`}}",
+      "type": "docker",
+      "image": "{{user `docker_image`}}",
+      "pull": false,
+      "export_path": "packer-docker-{{user `build_name`}}-{{user `os`}}.tar"
     }
   ],
   "provisioners": [
     {
       "type": "shell",
-      "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'",
+      "scripts": [
+        "scripts/{{user `build_name`}}.sh",
+        "scripts/cleanup.sh"
+      ],
       "override": {
-        "virtualbox-vagrant-rvm-193-{{user `os`}}": {
-          "scripts": [
-            "scripts/rvm-193.sh",
-            "scripts/cleanup.sh"
-          ]
+        "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}": {
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
         },
-        "vmware-vagrant-rvm-193-{{user `os`}}": {
-          "scripts": [
-            "scripts/rvm-193.sh",
-            "scripts/cleanup.sh"
-          ]
+        "vmware-vagrant-{{user `build_name`}}-{{user `os`}}": {
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
         }
       }
     }
@@ -47,14 +54,20 @@
   "post-processors": [
     {
       "type": "vagrant",
+      "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
       "override": {
         "virtualbox": {
-          "output": "boxes/{{user `os`}}-rvm-193-virtualbox.box"
+          "output": "boxes/{{user `os`}}-{{user `build_name`}}-virtualbox.box"
         },
         "vmware": {
-          "output": "boxes/{{user `os`}}-rvm-193-vmware.box"
+          "output": "boxes/{{user `os`}}-{{user `build_name`}}-vmware.box"
         }
       }
+    },
+    {
+      "type": "docker-import",
+      "only": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
+      "repository": "{{user `docker_user`}}/{{user `os`}}-{{user `build_name`}}"
     }
   ]
 }
