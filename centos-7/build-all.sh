@@ -9,7 +9,7 @@ rm -rf output-*
 box_prefix='centos-7'
 
 # build base VM that is used for all boxes
-packer build -only=virtualbox-base-${box_prefix} template-base.json
+packer build -except=vmware-base-${box_prefix} template-base.json
 
 # ensure the base box was built
 if [ ! -f "output-virtualbox-base-${box_prefix}/packer-virtualbox-base-${box_prefix}.ovf" ]; then
@@ -19,13 +19,13 @@ fi
 
 # build each box
 for box in 'nocm' 'puppet' 'puppet-agent' 'rvm-193' 'rvm-221'; do
-  packer build -only=virtualbox-vagrant-${box}-${box_prefix} template-${box}.json
+  packer build -except=vmware-vagrant-${box}-${box_prefix} template-${box}.json
 
   # check if the box was built
   if [ ! -f "boxes/${box_prefix}-${box}-virtualbox.box" ]; then
     # if the box wasn't built try one more time before failing
     echo "trying again to build ${box_prefix}-${box}-virtualbox.box"
-    packer build -only=virtualbox-vagrant-${box}-${box_prefix} template-${box}.json
+    packer build -except=vmware-vagrant-${box}-${box_prefix} template-${box}.json
   fi
 
   # if the box still does not exist then fail.
