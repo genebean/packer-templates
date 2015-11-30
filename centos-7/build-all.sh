@@ -7,9 +7,13 @@ rm -rf output-*
 
 # this is the first part of each box's name
 box_prefix='centos-7'
+docker_user='genebean'
 
 # build base VM that is used for all boxes
-packer build -except=vmware-base-${box_prefix} template-base.json
+packer build -force -except=vmware-base-${box_prefix} template-base.json
+echo 'testing Docker image...'
+docker run --name ${box_prefix}-base-hello-world ${docker_user}/${box_prefix}-base /bin/cat /etc/motd || exit 1
+docker rm ${box_prefix}-base-hello-world
 
 # ensure the base box was built
 if [ ! -f "output-virtualbox-base-${box_prefix}/packer-virtualbox-base-${box_prefix}.ovf" ]; then
@@ -19,13 +23,13 @@ fi
 
 # build each box
 for box in 'nocm' 'puppet' 'puppet-agent' 'rvm-193' 'rvm-221'; do
-  packer build -except=vmware-vagrant-${box}-${box_prefix} template-${box}.json
+  packer build -force -except=vmware-vagrant-${box}-${box_prefix} template-${box}.json
 
   # check if the box was built
   if [ ! -f "boxes/${box_prefix}-${box}-virtualbox.box" ]; then
     # if the box wasn't built try one more time before failing
     echo "trying again to build ${box_prefix}-${box}-virtualbox.box"
-    packer build -except=vmware-vagrant-${box}-${box_prefix} template-${box}.json
+    packer build -force -except=vmware-vagrant-${box}-${box_prefix} template-${box}.json
   fi
 
   # if the box still does not exist then fail.
@@ -37,18 +41,23 @@ for box in 'nocm' 'puppet' 'puppet-agent' 'rvm-193' 'rvm-221'; do
   echo "testing ${box_prefix}-${box}-virtualbox.box with Vagrant"
   sleep 2
 
-  vagrant box add boxes/${box_prefix}-${box}-virtualbox.box --name ${box_prefix}-${box} -f
-  vagrant init -m ${box_prefix}-${box}
-  vagrant up
+  vagrant box add boxes/${box_prefix}-${box}-virtualbox.box --name ${box_prefix}-${box} -f  || exit 1
+  vagrant init -m ${box_prefix}-${box}  || exit 1
+  vagrant up || exit 1
   sleep 2
-  vagrant destroy -f
-  vagrant box remove ${box_prefix}-${box} -f
+  vagrant destroy -f || exit 1
+  vagrant box remove ${box_prefix}-${box} -f || exit 1
 
   echo 'removing files made by Vagrant...'
   rm -rf .vagrant
   rm -f Vagrantfile
+
+  echo 'testing Docker image...'
+  docker run --name ${box_prefix}-${box}-hello-world ${docker_user}/${box_prefix}-${box} /bin/echo 'Hello world' || exit 1
+  docker rm ${box_prefix}-${box}-hello-world
 done
 
 tree
+docker images
 
 echo 'all boxes built.'
