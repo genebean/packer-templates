@@ -1,6 +1,8 @@
 {
   "variables": {
-    "os": "centos-6"
+    "os": "centos-6",
+    "docker_image": "genebean/centos-6-base",
+    "docker_user": "genebean"
   },
   "builders": [
     {
@@ -22,22 +24,25 @@
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
       "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'"
+    },
+    {
+      "name": "docker-nocm-{{user `os`}}",
+      "type": "docker",
+      "image": "{{user `docker_image`}}",
+      "pull": false,
+      "export_path": "packer-docker-nocm-{{user `os`}}.tar"
     }
   ],
   "provisioners": [
     {
       "type": "shell",
-      "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'",
+      "script": "scripts/cleanup.sh",
       "override": {
         "virtualbox-vagrant-nocm-{{user `os`}}": {
-          "scripts": [
-            "scripts/cleanup.sh"
-          ]
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
         },
         "vmware-vagrant-nocm-{{user `os`}}": {
-          "scripts": [
-            "scripts/cleanup.sh"
-          ]
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
         }
       }
     }
@@ -53,6 +58,10 @@
           "output": "boxes/{{user `os`}}-nocm-vmware.box"
         }
       }
+    },
+    {
+      "type": "docker-import",
+      "repository": "{{user `docker_user`}}/{{user `os`}}-nocm"
     }
   ]
 }
