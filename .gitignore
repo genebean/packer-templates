@@ -3,4 +3,4 @@
 */packer_cache/
 *.box
 *.bak
-
+*.tar

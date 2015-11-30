@@ -1,11 +1,17 @@
-sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
+if [ ! -f "/.dockerinit" ]; then
+  sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
+fi
 
 yum -y install yum-presto ntpdate
 
 # Ensure date is correct so that yum does not fail due to the time being off
 ntpdate -s time.nist.gov
 
-yum -y install binutils fuse-libs gcc gcc-c++ kernel-devel-`uname -r` make perl yum-utils
+yum -y install binutils fuse-libs gcc gcc-c++ make perl yum-utils
+
+if [ ! -f "/.dockerinit" ]; then
+  yum -y install kernel-devel-`uname -r`
+fi
 
 yum -y upgrade
 
@@ -30,5 +36,7 @@ echo 'Testing the MOTD...'
 echo
 cat /etc/motd
 
-reboot
-sleep 60
+if [ ! -f "/.dockerinit" ]; then
+  reboot
+  sleep 60
+fi

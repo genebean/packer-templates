@@ -1,5 +1,7 @@
-echo 'removing old kernels...'
-package-cleanup --oldkernels --count 1 -y
+if [ ! -f "/.dockerinit" ]; then
+  echo 'removing old kernels...'
+  package-cleanup --oldkernels --count 1 -y
+fi
 
 echo
 echo 'removing unneeded files and cache...'

@@ -1,6 +1,7 @@
 {
   "variables": {
-    "os": "centos-6"
+    "os": "centos-6",
+    "docker_image": "centos:centos6"
   },
   "builders": [
     {
@@ -62,30 +63,50 @@
         "numvcpus": "1",
         "cpuid.coresPerSocket": "1"
       }
+    },
+    {
+      "type": "docker",
+      "image": "{{user `docker_image`}}",
+      "pull": true,
+      "export_path": "packer-docker-base-{{user `os`}}.tar"
     }
   ],
   "provisioners": [
     {
       "type": "shell",
-      "execute_command": "echo 'vagrant'|sudo -S sh '{{.Path}}'",
+      "scripts": [
+        "scripts/base.sh",
+        "scripts/epel.sh",
+        "scripts/vagrant.sh"
+      ],
       "override": {
         "virtualbox-base-{{user `os`}}": {
-          "scripts": [
-            "scripts/base.sh",
-            "scripts/epel.sh",
-            "scripts/vagrant.sh",
-            "scripts/virtualbox.sh",
-            "scripts/cleanup.sh"
-          ]
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
         },
         "vmware-base-{{user `os`}}": {
-          "scripts": [
-            "scripts/base.sh",
-            "scripts/epel.sh",
-            "scripts/vagrant.sh",
-            "scripts/vmware.sh",
-            "scripts/cleanup.sh"
-          ]
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        }
+      }
+    },
+    {
+      "type": "shell",
+      "only": [ "virtualbox-base-{{user `os`}}" ],
+      "script": "scripts/virtualbox.sh"
+    },
+    {
+      "type": "shell",
+      "only": [ "vmware-base-{{user `os`}}" ],
+      "script": "scripts/vmware.sh"
+    },
+    {
+      "type": "shell",
+      "script": "scripts/cleanup.sh",
+      "override": {
+        "virtualbox-base-{{user `os`}}": {
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        },
+        "vmware-base-{{user `os`}}": {
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
         }
       }
     }
