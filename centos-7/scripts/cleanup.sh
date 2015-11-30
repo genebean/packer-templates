@@ -1,5 +1,7 @@
-echo 'removing old kernels...'
-package-cleanup --oldkernels --count 1 -y
+if [ ! -f "/.dockerinit" ]; then
+  echo 'removing old kernels...'
+  package-cleanup --oldkernels --count 1 -y
+fi
 
 echo
 echo 'removing unneeded files and cache...'
@@ -13,8 +15,8 @@ rm -f /etc/udev/rules.d/70*
 
 echo
 echo 'removing MAC and UUID from network startup script...'
-sed -i '/^HWADDR=.*$/d' /etc/sysconfig/network-scripts/ifcfg-eth0
-sed -i '/^UUID=.*$/d' /etc/sysconfig/network-scripts/ifcfg-eth0
+sed -i '/^HWADDR=.*$/d' /etc/sysconfig/network-scripts/ifcfg-*
+sed -i '/^UUID=.*$/d' /etc/sysconfig/network-scripts/ifcfg-*
 
 echo
 echo 'finishing up...'

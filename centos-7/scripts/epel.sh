@@ -1,2 +1,4 @@
 yum -y install epel-release
-yum -y install dkms
+if [ ! -f "/.dockerinit" ]; then
+  yum -y install dkms
+fi
