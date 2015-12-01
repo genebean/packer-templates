@@ -3,7 +3,9 @@
     "os": "centos-7",
     "docker_image": "centos:centos7",
     "docker_user": "genebean",
-    "build_name": "base"
+    "build_name": "base",
+    "iso_url": "http://reflector.westga.edu/repos/CentOS/7/isos/x86_64/CentOS-7-x86_64-Minimal-1503-01.iso",
+    "iso_checksum": "7c1e34e95c991175290d704dbdcc6531774cbecb"
   },
   "builders": [
     {
@@ -22,9 +24,9 @@
       "disk_size": 40520,
       "guest_os_type": "RedHat_64",
       "http_directory": "http",
-      "iso_checksum": "7c1e34e95c991175290d704dbdcc6531774cbecb",
+      "iso_checksum": "{{user `iso_checksum`}}",
       "iso_checksum_type": "sha1",
-      "iso_url": "http://reflector.westga.edu/repos/CentOS/7/isos/x86_64/CentOS-7-x86_64-Minimal-1503-01.iso",
+      "iso_url": "{{user `iso_url`}}",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -53,9 +55,9 @@
       "disk_size": 40520,
       "guest_os_type": "centos-64",
       "http_directory": "http",
-      "iso_checksum": "7c1e34e95c991175290d704dbdcc6531774cbecb",
+      "iso_checksum": "{{user `iso_checksum`}}",
       "iso_checksum_type": "sha1",
-      "iso_url": "http://reflector.westga.edu/repos/CentOS/7/isos/x86_64/CentOS-7-x86_64-Minimal-1503-01.iso",
+      "iso_url": "{{user `iso_url`}}",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
