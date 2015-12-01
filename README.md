@@ -189,6 +189,14 @@ name.
 ```
 
 
+## What's next
+
+The Ubuntu 14.04 folder currently is just a carry-over from the old setup. I
+plan to build this one out like the CentOS ones.
+
+Also, I plan to add in Windows templates and, possibly, support for KVM.
+
+
 [docker]: https://www.docker.com
 [shiguredo/packer-templates]: https://github.com/shiguredo/packer-templates
 [packer]: https://packer.io
