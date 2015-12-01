@@ -128,7 +128,7 @@ This script has just two things you may want to change:
 # this is the first part of each box's name
 box_prefix='centos-7'
 docker_user='genebean'
-````
+```
 
 If you are making a new OS and version combo then you will  want to update
 the `box_prefix` value. If you want the Docker images to have your name
@@ -146,7 +146,7 @@ updated via the command line also as an argument to `packer`.
 This template sets things up for all the subsequent builds and has the
 following settings:
 
-```json
+```bash
 "variables": {
   "os": "centos-7",                   # This should match the folder you are in
   "docker_image": "centos:centos7",   # This is the Docker image to base your images on
@@ -162,7 +162,7 @@ following settings:
 This template builds a box out of the base system without any further
 modififications.
 
-```json
+```bash
 "variables": {
   "os": "centos-7",                          # This should match the folder you are in
   "docker_image": "genebean/centos-7-base",  # Builds this image based on the base one
@@ -179,7 +179,7 @@ the template (`build_name`). All the specialized boxes are built
 this way. The only difference in any of these templates is the build
 name.
 
-```json
+```bash
 "variables": {
   "os": "centos-7",                          # This should match the folder you are in
   "docker_image": "genebean/centos-7-base",  # Builds this image based on the base one
