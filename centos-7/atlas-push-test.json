@@ -19,10 +19,12 @@
   "provisioners": [
     {
       "type": "shell",
-      "script": "scripts/cleanup.sh"
+      "script": "scripts/cleanup.sh",
+      "scripts/zerodisk.sh"
     }
   ],
   "push": {
-    "name": "genebean/centos-7-nocm"
+    "name": "genebean/centos-7-nocm",
+    "vcs": true
   }
 }
