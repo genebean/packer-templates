@@ -112,7 +112,10 @@
     },
     {
       "type": "shell",
-      "script": "scripts/cleanup.sh",
+      "scripts": [
+        "scripts/cleanup.sh",
+        "scripts/zerodisk.sh"
+      ],
       "override": {
         "virtualbox-{{user `build_name`}}-{{user `os`}}": {
           "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"

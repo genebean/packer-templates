@@ -39,7 +39,8 @@
       "type": "shell",
       "scripts": [
         "scripts/{{user `build_name`}}.sh",
-        "scripts/cleanup.sh"
+        "scripts/cleanup.sh",
+        "scripts/zerodisk.sh"
       ],
       "override": {
         "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}": {
