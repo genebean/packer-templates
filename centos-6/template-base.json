@@ -86,6 +86,7 @@
     {
       "type": "shell",
       "scripts": [
+        "scripts/networking.sh",
         "scripts/base.sh",
         "scripts/epel.sh",
         "scripts/vagrant.sh"
