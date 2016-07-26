@@ -4,8 +4,8 @@
     "docker_image": "centos:centos6",
     "docker_user": "genebean",
     "build_name": "base",
-    "iso_url": "http://reflector.westga.edu/repos/CentOS/6.7/isos/x86_64/CentOS-6.7-x86_64-minimal.iso",
-    "iso_checksum": "2ed5ea551dffc3e4b82847b3cee1f6cd748e8071"
+    "iso_url": "http://mirrors.mit.edu/centos/6/isos/x86_64/CentOS-6.8-x86_64-minimal.iso",
+    "iso_checksum": "28cd663c2267676414496f0929ce7bb285bf2506"
   },
   "builders": [
     {
