@@ -14,7 +14,8 @@ fi
 yum -y upgrade
 
 # Setup MOTD
-cat > /etc/motd << 'EOF'
+motd='/etc/motd'
+cat > $motd << 'EOF'
          ______           __  ____  _____    _____    ____
         / ____/__  ____  / /_/ __ \/ ___/   / ___/   / __ )____ _________
        / /   / _ \/ __ \/ __/ / / /\__ \   / __ \   / __  / __ `/ ___/ _ \
@@ -30,9 +31,12 @@ cat > /etc/motd << 'EOF'
 
 EOF
 
+echo $(printf 'Created on '; date +"%a %B %d, %Y") |perl -pe '$sp = " " x ((80 - length) / 2); s/^/$sp/' >> $motd
+echo >> $motd
+
 echo 'Testing the MOTD...'
 echo
-cat /etc/motd
+cat $motd
 
 if [ ! -f "/.dockerinit" ]; then
   reboot
