@@ -21,3 +21,4 @@ sed -i '/^UUID=.*$/d' /etc/sysconfig/network-scripts/ifcfg-*
 echo
 echo 'finishing up...'
 cat /etc/motd
+sync
