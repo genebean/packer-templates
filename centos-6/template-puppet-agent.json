@@ -42,7 +42,21 @@
       "type": "shell",
       "scripts": [
         "scripts/{{user `build_name`}}.sh",
-        "scripts/cleanup.sh",
+        "scripts/cleanup.sh"
+      ],
+      "override": {
+        "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}": {
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        },
+        "vmware-vagrant-{{user `build_name`}}-{{user `os`}}": {
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        }
+      }
+    },
+    {
+      "type": "shell",
+      "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
+      "scripts": [
         "scripts/zerodisk.sh"
       ],
       "override": {

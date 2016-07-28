@@ -115,7 +115,21 @@
     {
       "type": "shell",
       "scripts": [
-        "scripts/cleanup.sh",
+        "scripts/cleanup.sh"
+      ],
+      "override": {
+        "virtualbox-{{user `build_name`}}-{{user `os`}}": {
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        },
+        "vmware-{{user `build_name`}}-{{user `os`}}": {
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        }
+      }
+    },
+    {
+      "type": "shell",
+      "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
+      "scripts": [
         "scripts/zerodisk.sh"
       ],
       "override": {
