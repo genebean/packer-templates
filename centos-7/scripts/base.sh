@@ -10,7 +10,7 @@ ntpdate -s time.nist.gov
 
 yum -y install binutils fuse-libs gcc gcc-c++ make perl yum-utils
 
-if [ ! -f "/.dockerinit" ]; then
+if [ "$PACKER_BUILDER_TYPE" != "docker" ]; then
   yum -y install kernel-devel-`uname -r`
 fi
 
@@ -37,7 +37,7 @@ echo 'Testing the MOTD...'
 echo
 cat /etc/motd
 
-if [ ! -f "/.dockerinit" ]; then
+if [ "$PACKER_BUILDER_TYPE" != "docker" ]; then
   reboot
   sleep 60
 fi

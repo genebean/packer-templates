@@ -1,4 +1,4 @@
-if [ ! -f "/.dockerinit" ]; then
+if [ "$PACKER_BUILDER_TYPE" != "docker" ]; then
   echo 'removing old kernels...'
   package-cleanup --oldkernels --count 1 -y
 fi
