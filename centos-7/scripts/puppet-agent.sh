@@ -4,7 +4,7 @@
 yum install -y http://reflector.westga.edu/repos/PuppetLabs/yum/puppetlabs-release-pc1-el-7.noarch.rpm
 yum -y install puppet-agent
 source /etc/profile.d/puppet-agent.sh
-puppet resource service puppet ensure=stopped enable=false
+puppet resource service puppet ensure=stopped enable=false || exit 1
 
 cat > /etc/puppetlabs/puppet/puppet.conf << EOF
 # This file can be used to override the default puppet settings.
@@ -27,7 +27,8 @@ if [ -d '/etc/puppetlabs/puppet/ssl' ]; then
 fi
 
 # Setup MOTD
-cat > /etc/motd << 'EOF'
+motd='/etc/motd'
+cat > $motd << 'EOF'
                  ____                         __     __ __        
                 / __ \__  ______  ____  ___  / /_   / // /   _  __
                / /_/ / / / / __ \/ __ \/ _ \/ __/  / // /_  | |/_/
@@ -42,9 +43,10 @@ cat > /etc/motd << 'EOF'
                /____/                                                  
 
 EOF
+echo $(printf 'Created on '; date +"%a %B %d, %Y") |perl -pe '$sp = " " x ((80 - length) / 2); s/^/$sp/' >> $motd
+echo >> $motd
 
 echo 'Testing the MOTD...'
 echo
-cat /etc/motd
-
+cat $motd
 

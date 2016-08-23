@@ -1,6 +1,6 @@
 #!/bin/bash
-DIR="$(dirname "$(perl -e 'use Cwd "abs_path";print abs_path(shift)' "$0")")"
-TMPDIR="$(perl -e 'use Cwd "abs_path";print abs_path(shift)' "../tmp")"
+#DIR="$(dirname "$(perl -e 'use Cwd "abs_path";print abs_path(shift)' "$0")")"
+DIR="$(cd "$(dirname "$0")" && pwd -P)"
 cd $DIR
 
 rm -f boxes/*

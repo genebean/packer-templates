@@ -3,7 +3,7 @@
 # Puppet Agent
 yum install -y http://reflector.westga.edu/repos/PuppetLabs/yum/puppetlabs-release-el-7.noarch.rpm
 yum -y install puppet
-puppet resource service puppet ensure=stopped enable=false
+puppet resource service puppet ensure=stopped enable=false || exit 1
 
 cat > /etc/puppet/puppet.conf << EOF
 [main]
@@ -40,7 +40,8 @@ if [ -d '/var/lib/puppet/ssl' ]; then
 fi
 
 # Setup MOTD
-cat > /etc/motd << 'EOF'
+motd='/etc/motd'
+cat > $motd << 'EOF'
                   ____                         __     _____
                  / __ \__  ______  ____  ___  / /_   |__  /  _  __
                 / /_/ / / / / __ \/ __ \/ _ \/ __/    /_ <  | |/_/
@@ -55,8 +56,9 @@ cat > /etc/motd << 'EOF'
                /____/
 
 EOF
+echo $(printf 'Created on '; date +"%a %B %d, %Y") |perl -pe '$sp = " " x ((80 - length) / 2); s/^/$sp/' >> $motd
+echo >> $motd
 
 echo 'Testing the MOTD...'
 echo
-cat /etc/motd
-
+cat $motd

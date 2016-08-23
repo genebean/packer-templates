@@ -17,7 +17,8 @@ su - vagrant -c 'ruby -v'
 echo
 
 # Setup MOTD
-cat > /etc/motd << 'EOF'
+motd='/etc/motd'
+cat > $motd << 'EOF'
                ____ _    ____  ___                 ___    ___    ___
               / __ \ |  / /  |/  /    __     _   _|__ \  |__ \  <  /
              / /_/ / | / / /|_/ /  __/ /_   | | / /_/ /  __/ /  / /
@@ -32,7 +33,9 @@ cat > /etc/motd << 'EOF'
                /____/
 
 EOF
+echo $(printf 'Created on '; date +"%a %B %d, %Y") |perl -pe '$sp = " " x ((80 - length) / 2); s/^/$sp/' >> $motd
+echo >> $motd
 
 echo 'Testing the MOTD...'
 echo
-cat /etc/motd
+cat $motd

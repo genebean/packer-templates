@@ -6,7 +6,7 @@ fi
 echo
 echo 'removing unneeded files and cache...'
 yum -y clean all
-rm -rf VBoxGuestAdditions_*.iso
+find / -iname VBoxGuestAdditions.iso -delete
 rm -rf /tmp/rubygems-*
 
 echo
@@ -21,3 +21,4 @@ sed -i '/^UUID=.*$/d' /etc/sysconfig/network-scripts/ifcfg-*
 echo
 echo 'finishing up...'
 cat /etc/motd
+sync

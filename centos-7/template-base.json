@@ -4,7 +4,7 @@
     "docker_image": "centos:centos7",
     "docker_user": "genebean",
     "build_name": "base",
-    "iso_url": "http://reflector.westga.edu/repos/CentOS/7/isos/x86_64/CentOS-7-x86_64-Minimal-1503-01.iso",
+    "iso_url": "http://mirrors.mit.edu/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1503-01.iso",
     "iso_checksum": "7c1e34e95c991175290d704dbdcc6531774cbecb"
   },
   "builders": [
@@ -88,6 +88,7 @@
     {
       "type": "shell",
       "scripts": [
+        "scripts/networking.sh",
         "scripts/base.sh",
         "scripts/epel.sh",
         "scripts/vagrant.sh"
@@ -116,7 +117,21 @@
     {
       "type": "shell",
       "scripts": [
-        "scripts/cleanup.sh",
+        "scripts/cleanup.sh"
+      ],
+      "override": {
+        "virtualbox-{{user `build_name`}}-{{user `os`}}": {
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        },
+        "vmware-{{user `build_name`}}-{{user `os`}}": {
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        }
+      }
+    },
+    {
+      "type": "shell",
+      "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
+      "scripts": [
         "scripts/zerodisk.sh"
       ],
       "override": {

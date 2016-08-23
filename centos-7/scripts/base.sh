@@ -6,6 +6,7 @@ yum -y remove iwl*
 # install deltarpm so to reduce the size of updates downloaded
 yum -y install deltarpm ntpdate
 
+# Ensure date is correct so that yum does not fail due to the time being off
 ntpdate -s time.nist.gov
 
 yum -y install binutils fuse-libs gcc gcc-c++ make perl yum-utils
@@ -17,7 +18,8 @@ fi
 yum -y upgrade
 
 # Setup MOTD
-cat > /etc/motd << 'EOF'
+motd='/etc/motd'
+cat > $motd << 'EOF'
          ______           __  ____  _____    _____   ____
         / ____/__  ____  / /_/ __ \/ ___/   /__  /  / __ )____ _________
        / /   / _ \/ __ \/ __/ / / /\__ \      / /  / __  / __ `/ ___/ _ \
@@ -33,9 +35,12 @@ cat > /etc/motd << 'EOF'
 
 EOF
 
+echo $(printf 'Created on '; date +"%a %B %d, %Y") |perl -pe '$sp = " " x ((80 - length) / 2); s/^/$sp/' >> $motd
+echo >> $motd
+
 echo 'Testing the MOTD...'
 echo
-cat /etc/motd
+cat $motd
 
 if [ "$PACKER_BUILDER_TYPE" != "docker" ]; then
   reboot

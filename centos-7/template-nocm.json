@@ -14,7 +14,10 @@
       "ssh_password": "vagrant",
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
-      "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'"
+      "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'",
+      "vboxmanage": [
+        [ "modifyvm", "{{.Name}}", "--audio", "none" ]
+      ]
     },
     {
       "name": "vmware-vagrant-{{user `build_name`}}-{{user `os`}}",
@@ -38,7 +41,21 @@
     {
       "type": "shell",
       "scripts": [
-        "scripts/cleanup.sh",
+        "scripts/cleanup.sh"
+      ],
+      "override": {
+        "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}": {
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        },
+        "vmware-vagrant-{{user `build_name`}}-{{user `os`}}": {
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        }
+      }
+    },
+    {
+      "type": "shell",
+      "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
+      "scripts": [
         "scripts/zerodisk.sh"
       ],
       "override": {
