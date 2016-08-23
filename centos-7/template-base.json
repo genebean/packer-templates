@@ -4,8 +4,8 @@
     "docker_image": "centos:centos7",
     "docker_user": "genebean",
     "build_name": "base",
-    "iso_url": "http://mirrors.mit.edu/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1503-01.iso",
-    "iso_checksum": "7c1e34e95c991175290d704dbdcc6531774cbecb"
+    "iso_url": "http://mirrors.mit.edu/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1511.iso",
+    "iso_checksum": "783eef50e1fb91c78901d0421d8114a29b998478"
   },
   "builders": [
     {

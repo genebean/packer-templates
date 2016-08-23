@@ -22,7 +22,7 @@ case "$1" in
 esac
 
 # this is the first part of each box's name
-box_prefix='centos-6'
+box_prefix='centos-7'
 docker_user='genebean'
 
 # build base VM that is used for all boxes
