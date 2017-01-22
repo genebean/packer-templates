@@ -7,13 +7,13 @@ usermod -a -G rvm vagrant
 su - vagrant -c 'rvm autolibs enable'
 
 # Setup Ruby 1.9.3
-su - vagrant -c 'rvm install 2.2.1'
+su - vagrant -c 'rvm install 2.2.1' || exit 1
 
 # Verify install
 echo
 echo 'Checking RMV and Ruby'
-su - vagrant -c 'rvm -v'
-su - vagrant -c 'ruby -v'
+su - vagrant -c 'rvm -v' || exit 1
+su - vagrant -c 'ruby -v' || exit 1
 echo
 
 # Setup MOTD
