@@ -9,7 +9,7 @@ yum -y install deltarpm ntpdate
 # Ensure date is correct so that yum does not fail due to the time being off
 ntpdate -s time.nist.gov
 
-yum -y install binutils fuse-libs gcc gcc-c++ make perl yum-utils
+yum -y install binutils fuse-libs gcc gcc-c++ make net-tools perl vim yum-utils
 
 if [ "$PACKER_BUILDER_TYPE" != "docker" ]; then
   yum -y install kernel-devel-`uname -r`

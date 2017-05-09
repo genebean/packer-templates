@@ -10,7 +10,7 @@ for i in rvm-221 rvm-193 puppet-agent puppet nocm; do
   docker tag ${user}/${os}-$i ${user}/${os}-$i:${version}
 done
 
-docker images
+docker images ${user}/*
 echo
 echo
 echo '**********************************************************************************'

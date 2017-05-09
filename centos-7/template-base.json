@@ -16,7 +16,7 @@
         "<tab>",
         "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
         "<wait5>",
-        " quiet vga=791",
+        " ipv6.disable=1 biosdevname=0 net.ifnames=0 quiet vga=791",
         " text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg",
         "<wait5><enter>"
       ],
@@ -48,7 +48,7 @@
         "<tab>",
         "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
         "<wait5>",
-        "quiet vga=791",
+        "ipv6.disable=1 biosdevname=0 net.ifnames=0 quiet vga=791",
         " text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg",
         "<wait5><enter>"
       ],
