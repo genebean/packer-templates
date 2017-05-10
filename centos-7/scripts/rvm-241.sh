@@ -1,5 +1,5 @@
 #!/bin/bash
-rvm_version='2.2.1'
+rvm_version='2.4.1'
 # Setup RVM
 gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3 || exit 1
 su - vagrant -c '\curl -L https://get.rvm.io | sudo bash -s stable' || exit 1

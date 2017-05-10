@@ -43,7 +43,7 @@ fi
 
 
 # build each box
-for box in 'nocm' 'puppet' 'puppet-agent' 'rvm-193' 'rvm-221'; do
+for box in 'nocm' 'puppet' 'puppet-agent' 'rvm-193' 'rvm-221' 'rvm-241'; do
   if [ "${builder}" == "docker" ]; then
     packer build -force -only=${builder}-${box}-${box_prefix} template-${box}.json
 
@@ -53,7 +53,7 @@ for box in 'nocm' 'puppet' 'puppet-agent' 'rvm-193' 'rvm-221'; do
     sleep 2
   else
     packer build -force -only=${builder}-vagrant-${box}-${box_prefix} template-${box}.json
-    
+
     # check if the box was built
     if [ ! -f "boxes/${box_prefix}-${box}-${builder}.box" ]; then
       # if the box wasn't built try one more time before failing

@@ -41,23 +41,12 @@ fi
 
 # Setup MOTD
 motd='/etc/motd'
-cat > $motd << 'EOF'
-                  ____                         __     _____
-                 / __ \__  ______  ____  ___  / /_   |__  /  _  __
-                / /_/ / / / / __ \/ __ \/ _ \/ __/    /_ <  | |/_/
-               / ____/ /_/ / /_/ / /_/ /  __/ /_    ___/ / _>  <
-              /_/    \__,_/ .___/ .___/\___/\__/   /____(_)_/|_|
-                         /_/   /_/
-             __             ______                ____
-            / /_  __  __   / ____/__  ____  ___  / __ )___  ____ _____
-           / __ \/ / / /  / / __/ _ \/ __ \/ _ \/ __  / _ \/ __ `/ __ \
-          / /_/ / /_/ /  / /_/ /  __/ / / /  __/ /_/ /  __/ /_/ / / / /
-         /_.___/\__, /   \____/\___/_/ /_/\___/_____/\___/\__,_/_/ /_/
-               /____/
+motd_first_row="Puppet 3.x"
 
-EOF
-echo $(printf 'Created on '; date +"%a %B %d, %Y") |perl -pe '$sp = " " x ((80 - length) / 2); s/^/$sp/' >> $motd
-echo >> $motd
+figlet -w 80 -c -f slant "${motd_first_row}" > $motd || exit 1
+figlet -w 80 -c -f slant "by GeneBean" >> $motd || exit 1
+echo $(printf 'Created on '; date +"%a %B %d, %Y") |perl -pe '$sp = " " x ((80 - length) / 2); s/^/$sp/' >> $motd || exit 1
+echo >> $motd || exit 1
 
 echo 'Testing the MOTD...'
 echo

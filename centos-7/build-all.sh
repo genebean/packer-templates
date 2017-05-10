@@ -23,7 +23,7 @@ if [ ! -f "output-virtualbox-base-${box_prefix}/packer-virtualbox-base-${box_pre
 fi
 
 # build each box
-for box in 'nocm' 'puppet' 'puppet-agent' 'rvm-193' 'rvm-221'; do
+for box in 'nocm' 'puppet' 'puppet-agent' 'rvm-193' 'rvm-221' 'rvm-241'; do
   packer build -force -except=vmware-vagrant-${box}-${box_prefix} template-${box}.json
 
   # check if the box was built
