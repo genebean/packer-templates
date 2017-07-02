@@ -73,6 +73,7 @@ for box in `cat ${DIR}/box-versions`; do
     vagrant box add boxes/${box_prefix}-${box}-${builder}.box --name ${box_prefix}-${box} -f  || exit 1
     vagrant init -m ${box_prefix}-${box}  || exit 1
     vagrant up || exit 1
+    vagrant ssh -c 'cat /etc/motd' || exit 1
     sleep 2
     vagrant destroy -f || exit 1
     vagrant box remove ${box_prefix}-${box} -f || exit 1
