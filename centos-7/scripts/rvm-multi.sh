@@ -2,7 +2,8 @@
 rvm_versions=(jruby-9.1 2.4.1 2.2.1 1.9.3)
 rvm_default_version='2.4.1'
 # Setup RVM
-gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3 || exit 1
+curl -#OL https://rvm.io/mpapis.asc || exit 1
+gpg --import mpapis.asc || exit 1
 su - vagrant -c '\curl -L https://get.rvm.io | sudo bash -s stable' || exit 1
 
 # Verify RVM install
