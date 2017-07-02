@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Puppet Agent
-yum install -y http://reflector.westga.edu/repos/PuppetLabs/yum/puppetlabs-release-pc1-el-6.noarch.rpm
+yum install -y https://yum.puppetlabs.com/puppet5/puppet5-release-el-6.noarch.rpm
 yum -y install puppet-agent
 source /etc/profile.d/puppet-agent.sh
 puppet resource service puppet ensure=stopped enable=false || exit 1
@@ -28,7 +28,7 @@ fi
 
 # Setup MOTD
 motd='/etc/motd'
-motd_first_row="Puppet 4.x"
+motd_first_row="Puppet 5.x"
 
 figlet -w 80 -c -f slant "${motd_first_row}" > $motd || exit 1
 figlet -w 80 -c -f slant "by GeneBean" >> $motd || exit 1

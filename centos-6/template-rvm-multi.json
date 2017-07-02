@@ -3,7 +3,7 @@
     "os": "centos-6",
     "docker_image": "genebean/centos-6-base",
     "docker_user": "genebean",
-    "build_name": "rvm-193"
+    "build_name": "rvm-multi"
   },
   "builders": [
     {
