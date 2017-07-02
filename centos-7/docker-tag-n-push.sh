@@ -17,7 +17,7 @@ echo
 echo '**********************************************************************************'
 echo 'Make sure the list above is correct.'
 echo "If it isn't then be sure to hit ^c quick"
-echo "In 60 seconds all of the ${os}-${version}"
+echo "In 60 seconds all of the ${os} ${version}"
 echo 'images will get pushed to docker.io'
 echo '**********************************************************************************'
 sleep 60
