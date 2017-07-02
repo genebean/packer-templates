@@ -43,7 +43,7 @@ fi
 
 
 # build each box
-for box in 'nocm' 'puppet' 'puppet-agent' 'rvm-193' 'rvm-221'; do
+for box in `cat ${DIR}/box-versions`; do
   if [ "${builder}" == "docker" ]; then
     packer build -force -only=${builder}-${box}-${box_prefix} template-${box}.json
 
