@@ -2,7 +2,7 @@
 
 This repo contains my [Packer][packer] templates for building bases boxes used
 in [Vagrant][vagrant] and [Docker][docker]. By default it will build the Vagrant
-boxes in Virtualbox and Docker format. There are also definitons for VMware boxes
+boxes in Virtualbox and Docker format. There are also definitions for VMware boxes
 but these are untested due to issues getting Packer and VMware Player to play
 nice with each other. The files in the repo are laid out
 so that each OS and version combo has a top-level folder. Under each of these
@@ -11,16 +11,20 @@ configurations including:
 - `base`: the common base that the boxes below are built on top of
 - `nocm`: a setup without any configuration management installed
 - `puppet`: Puppet 3.x is installed
-- `puppet-agent`: Puppet 4.x is installed (uses the new all-in-one pacakage)
-- `rvm-193`: RVM and version 1.9.3 of Ruby are installed
-- `rvm-221`: RVM and version 2.2.1 of Ruby are installed
+- `puppet5`: Puppet 5.x is installed
+- `puppet-agent`: Puppet 4.x is installed
+- `rvm-multi`: RVM with the following Rubys installed:
+  - jruby-9.1
+  - 2.4.1 (default)
+  - 2.2.1
+  - 1.9.3
 
 The base version is a little different than the others. When used for a
 virtual machine it does not produce a Vagrant box but rather creates a
 VM that is used by all the other builds. The Docker version does produce
 an image that is essentially identical to the "nocm" version. This is
-done primarily for consistancy as the "nocm" version of each is what
-will be shared publically.
+done primarily for consistency as the "nocm" version of each is what
+will be shared publicly.
 
 Many of the ideas and concepts for these templates have been pulled
 from the following two sources:
@@ -54,6 +58,12 @@ and unzip the appropriate directory.
 $ git clone https://github.com/genebean/packer-templates.git
 $ cd packer-templates
 ```
+
+### The `box-versions` file
+
+The build scripts below all reference a file called `box-versions`. This files
+simply contains the list of templates that each script should loop over so that
+the list is not duplicated between scripts.
 
 ### Build all boxes in all folders
 
@@ -93,41 +103,49 @@ $ packer build template-some-type.json
 # replace "puppet" with the type of box you want
 
 # for Virtualbox:
-$ packer build -only=virtualbox-base-centos-7 template-base.json
-$ packer build -only=virtualbox-vagrant-puppet-centos-7 template-puppet.json
+$ ./build.sh vagrant
 
 # for Docker:
-$ packer build -only=docker-base-centos-7 template-base.json
-$ packer build -only=docker-puppet-centos-7 template-puppet.json
+$ ./build.sh docker
 
 # for VMware:
-$ packer build -only=vmware-base-centos-7 template-base.json
-$ packer build -only=vmware-vagrant-puppet-centos-7 template-puppet.json
+$ ./build.sh vmware
+```
+
+### Push Docker Images
+
+```bash
+cd packer-templates # repo root folder
+./docker-tag-n-push.sh x.y.z # version being released
 ```
 
 
 ### Supported Packer version
 
-This templates was tested using a packer 0.8.6
+This templates was tested using a packer 1.1.3
 
 
 # Development
 
 If you would like to make new templates or change these to have your name
-instead of `genebean` then you will want to take note not of the variables
+instead of `genebean` then you will want to take note of the variables
 in the templates and build scripts. Below are some details to get you
 started.
 
 ## Build Scripts
 
-This script has just two things you may want to change:
+These scripts have just two things you may want to change:
 
 ```bash
-# this is in build-all.sh
+# this is in all three scripts:
+# - build.sh
+# - build-all.sh
+# - docker-tag-n-push.sh
 
 # this is the first part of each box's name
 box_prefix='centos-7'
 docker_user='genebean'
+os='centos-7'
 ```
 
 If you are making a new OS and version combo then you will  want to update
@@ -160,7 +178,7 @@ following settings:
 ### template-nocm
 
 This template builds a box out of the base system without any further
-modififications.
+modifications.
 
 ```bash
 "variables": {
@@ -171,7 +189,7 @@ modififications.
 }
 ```
 
-### template-puppet / template-rvm-193 / etc...
+### template-puppet / template-rvm-multi / etc.
 
 These templates build a box out of the base system. They build a box
 by running a script during provisioning that has the same name as
