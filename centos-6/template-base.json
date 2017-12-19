@@ -4,7 +4,7 @@
     "docker_image": "centos:centos6",
     "docker_user": "genebean",
     "build_name": "base",
-    "iso_url": "http://mirrors.mit.edu/centos/6/isos/x86_64/CentOS-6.9-x86_64-minimal.iso",
+    "iso_url": "http://ftp.osuosl.org/pub/centos/6/isos/x86_64/CentOS-6.9-x86_64-minimal.iso",
     "iso_checksum": "b23d4d996d2cb5b370120588d5ea18a9cfba7881"
   },
   "builders": [
