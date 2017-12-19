@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR="$(dirname "$(readlink -f "$0")")"
+DIR="$(cd "$(dirname "$0")" && pwd -P)"
 cd $DIR
 
 if [ "$1" = "-p" ]; then
