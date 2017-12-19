@@ -4,4 +4,5 @@
 *.box
 *.bak
 *.tar
+env-vars
 Vagrantfile
