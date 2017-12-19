@@ -19,3 +19,9 @@ else
     ./${os}
   done
 fi
+
+echo
+ls */boxes/
+echo
+docker images
+
