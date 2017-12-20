@@ -9,6 +9,7 @@
     {
       "name": "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}",
       "type": "virtualbox-ovf",
+      "vm_name": "packer-virtualbox-{{user `build_name`}}-{{user `os`}}",
       "source_path": "output-virtualbox-base-{{user `os`}}/packer-virtualbox-base-{{user `os`}}.ovf",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
@@ -22,6 +23,7 @@
     {
       "name": "vmware-vagrant-{{user `build_name`}}-{{user `os`}}",
       "type": "vmware-vmx",
+      "vm_name": "packer-vmware-{{user `build_name`}}-{{user `os`}}",
       "source_path": "output-vmware-base-{{user `os`}}/packer-vmware-base-{{user `os`}}.vmx",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
@@ -72,6 +74,7 @@
     {
       "type": "vagrant",
       "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
+      "keep_input_artifact": true,
       "override": {
         "virtualbox": {
           "output": "boxes/{{user `os`}}-{{user `build_name`}}-virtualbox.box"

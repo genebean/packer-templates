@@ -43,7 +43,7 @@
     {
       "name": "vmware-{{user `build_name`}}-{{user `os`}}",
       "type": "vmware-iso",
-      "vm_name": "packer-vmware-{{user `build_name`}}-{{user `os`}}",
+      "vm_name": "packer-vmware-desktop-{{user `build_name`}}-{{user `os`}}",
       "boot_command": [
         "<tab>",
         "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
