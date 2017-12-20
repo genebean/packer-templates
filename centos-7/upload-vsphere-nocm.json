@@ -2,12 +2,14 @@
 
   "variables":
     {
-      "template_name": "gene-centos-7.4.1708-x86_64",
+      "template_name": "centos-7.4.1708-x86_64",
       "version": "0.0.1",
       "build_name": "nocm",
       "os": "centos-7",
 
       "provisioner": "vmware",
+      "packer_root_keys": "{{env `PACKER_ROOT_KEYS`}}",
+      "packer_root_pw": "{{env `PACKER_ROOT_PW`}}",
       "packer_vcenter_host": "{{env `PACKER_VCENTER_HOST`}}",
       "packer_vcenter_username": "{{env `PACKER_VCENTER_USERNAME`}}",
       "packer_vcenter_password": "{{env `PACKER_VCENTER_PASSWORD`}}",
@@ -17,6 +19,7 @@
       "packer_vcenter_folder": "{{env `PACKER_VCENTER_FOLDER`}}",
       "packer_vcenter_net": "{{env `PACKER_VCENTER_NET`}}",
       "packer_vcenter_insecure": "{{env `PACKER_VCENTER_INSECURE`}}",
+      "packer_vcenter_overwrite": "{{env `PACKER_VCENTER_OVEERWRITE`}}",
 
       "memory_size": "4096",
       "cpu_count": "2"
@@ -28,7 +31,7 @@
       "type": "vmware-vmx",
       "vm_name": "packer-vmware-vsphere-{{user `build_name`}}-{{user `os`}}",
       "source_path": "output-vmware-vagrant-{{user `build_name`}}-{{user `os`}}/packer-vmware-{{user `build_name`}}-{{user `os`}}.vmx",
-      "ssh_username": "vagrant",
+      "ssh_username": "root",
       "ssh_password": "vagrant",
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
@@ -49,7 +52,28 @@
     {
       "type": "shell",
       "scripts": [
-        "scripts/cleanup.sh"
+        "scripts/root_keys_dir_creation.sh"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "{{user `packer_root_keys`}}/",
+      "destination": "/tmp/root_keys"
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "scripts/root_keys_list.sh"
+      ]
+    },
+    {
+      "type": "shell",
+      "environment_vars": [
+        "PACKER_ROOT_PW={{user `packer_root_pw`}}"
+      ],
+      "scripts": [
+        "scripts/cleanup.sh",
+        "scripts/upload-vsphere-{{user `build_name`}}.sh"
       ]
     }
   ],
@@ -57,6 +81,7 @@
   "post-processors": [
     {
       "type": "vsphere",
+      "keep_input_artifact": false,
       "host": "{{user `packer_vcenter_host`}}",
       "username": "{{user `packer_vcenter_username`}}",
       "password": "{{user `packer_vcenter_password`}}",
@@ -66,7 +91,9 @@
       "vm_folder": "{{user `packer_vcenter_folder`}}",
       "vm_name": "{{user `template_name`}}-{{user `version`}}",
       "vm_network": "{{user `packer_vcenter_net`}}",
-      "insecure" : "{{user `packer_vcenter_insecure`}}"
+      "disk_mode": "thin",
+      "insecure" : "{{user `packer_vcenter_insecure`}}",
+      "overwrite": "{{user `packer_vcenter_overwrite`}}"
     }
   ]
 }
