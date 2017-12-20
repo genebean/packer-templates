@@ -12,12 +12,13 @@ cat > /etc/puppetlabs/puppet/puppet.conf << EOF
 # - https://docs.puppetlabs.com/puppet/latest/reference/config_important_settings.html
 # - https://docs.puppetlabs.com/puppet/latest/reference/config_about_settings.html
 # - https://docs.puppetlabs.com/puppet/latest/reference/config_file_main.html
-# - https://docs.puppetlabs.com/references/latest/configuration.html
+# - https://docs.puppetlabs.com/puppet/latest/reference/configuration.html
+#
+# Settings below added by Packer during box creation
 [main]
-    ca_server            = localhost
-    server               = localhost
+    ca_server            = localhost.localdomain
+    server               = localhost.localdomain
     strict_variables     = true
-    trusted_server_facts = true
 [agent]
 
 EOF
