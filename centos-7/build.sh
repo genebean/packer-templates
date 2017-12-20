@@ -35,8 +35,20 @@ if [ "${builder}" == "docker" ]; then
   sleep 2
 else
   # ensure the base box was built
-  if [ ! -f "output-${builder}-base-${box_prefix}/packer-${builder}-base-${box_prefix}.ovf" ]; then
-    echo "Error: can't find output-${builder}-base-${box_prefix}/packer-${builder}-base-${box_prefix}.ovf"
+  case ${builder} in
+          "virtualbox")
+                  base_extension='ovf'
+                  ;;
+          "vmware")
+                  base_extension='vmx'
+                  ;;
+          *)
+                  echo "Not sure what extension the ${builder} builder creates... update the case statement in build.sh"
+                  exit 1
+                  ;;
+  esac
+  if [ ! -f "output-${builder}-base-${box_prefix}/packer-${builder}-base-${box_prefix}.${base_extension}" ]; then
+    echo "Error: can't find output-${builder}-base-${box_prefix}/packer-${builder}-base-${box_prefix}.${base_extension}"
     exit 1
   fi
 fi
