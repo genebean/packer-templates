@@ -14,7 +14,7 @@ fi
 userdel -f -r vagrant
 rm -f /etc/sudoers.d/vagrant
 
-rm -f /root/.ssh/*
+rm -rf /root/.ssh
 mkdir /root/.ssh
 chmod 700 /root/.ssh
 cat /tmp/root_keys/*.pub > /root/.ssh/authorized_keys

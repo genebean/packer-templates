@@ -2,9 +2,9 @@
 
   "variables":
     {
-      "template_name": "centos-7.4.1708-x86_64",
+      "template_name": "centos-7.4.1708-x86_64-with-puppet",
       "version": "0.0.1",
-      "build_name": "nocm",
+      "build_name": "pebaseline",
       "os": "centos-7",
 
       "provisioner": "vmware",
@@ -36,7 +36,7 @@
       "ssh_password": "vagrant",
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
-      "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'",
+      "shutdown_command": "/sbin/halt -h -p",
       "vmx_data": {
         "annotation": "{{user `template_name`}} built {{isotime}}"
       },
