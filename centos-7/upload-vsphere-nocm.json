@@ -30,6 +30,7 @@
       "name": "vmware-vsphere-{{user `build_name`}}-{{user `os`}}",
       "type": "vmware-vmx",
       "vm_name": "packer-vmware-vsphere-{{user `build_name`}}-{{user `os`}}",
+      "headless": true,
       "source_path": "output-vmware-vagrant-{{user `build_name`}}-{{user `os`}}/packer-vmware-{{user `build_name`}}-{{user `os`}}.vmx",
       "ssh_username": "root",
       "ssh_password": "vagrant",
