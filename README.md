@@ -10,6 +10,7 @@ folders are all the files needed to build that combo in several different
 configurations including:
 - `base`: the common base that the boxes below are built on top of
 - `nocm`: a setup without any configuration management installed
+- `docker-ce`: Docker CE installed and configured
 - `puppet`: Puppet 3.x is installed
 - `puppet5`: Puppet 5.x is installed
 - `puppet-agent`: Puppet 4.x is installed
@@ -189,7 +190,7 @@ modifications.
 }
 ```
 
-### template-puppet / template-rvm-multi / etc.
+### template-puppet5 / template-rvm-multi / etc.
 
 These templates build a box out of the base system. They build a box
 by running a script during provisioning that has the same name as
@@ -202,9 +203,38 @@ name.
   "os": "centos-7",                          # This should match the folder you are in
   "docker_image": "genebean/centos-7-base",  # Builds this image based on the base one
   "docker_user": "genebean",                 # This is the name that will be used when exporting the Docker image
-  "build_name": "puppet"                     # This is the name of the template you are in
+  "build_name": "puppet5"                    # This is the name of the template you are in
 }
 ```
+
+
+## Specialty Templates
+
+These templates are in a slightly different class than the standard ones above:
+they do specialize things and may well require extra configuration to work.
+They also are not included in `box-versions` which means they are not part of
+the `build.sh` or `build-all.sh` scripts.
+
+### template-pebaseline
+
+This template is an extension of the puppet-related templates above that is
+designed to work with a Puppet Enterprise installation. During the provisioning
+phase this template will install a Puppet agent using the `curl|bash` method,
+prompt you to go sign the cert, run puppet twice, and then prompt you to go
+purge the node. It will also clean up the machine being built so that it can
+easily be renamed and joined back to puppet later. The primary purpose of this
+template is to generate an image that can be uploaded to VMware vCenter and used
+as a template there.
+
+### upload-vsphere-*
+
+These specialized templates take the output of the corresponding `template-*`,
+prep it for upload to vCenter, and then upload it via the vsphere post-processor
+to a vCenter. To use this template you must first set several environment
+variables. To make this easier there is a `env-vars.sample` in this repository
+that you can copy to `env-vars`, fill in as needed, and then source. The file
+`env-vars` has been added to the .gitignore file so that it will not be tracked
+by version control.
 
 
 ## What's next
