@@ -59,12 +59,16 @@ fi
 # build each box
 for box in `cat ${DIR}/box-versions`; do
   if [ "${builder}" == "docker" ]; then
-    packer build -force -only=${builder}-${box}-${box_prefix} template-${box}.json
+    if [[ "${box}" != *"docker"* ]]; then
+      packer build -force -only=${builder}-${box}-${box_prefix} template-${box}.json
 
-    echo 'testing Docker image...'
-    docker run --name ${box_prefix}-${box}-hello-world ${docker_user}/${box_prefix}-${box} /bin/echo 'Hello world' || exit 1
-    docker rm ${box_prefix}-${box}-hello-world
-    sleep 2
+      echo 'testing Docker image...'
+      docker run --name ${box_prefix}-${box}-hello-world ${docker_user}/${box_prefix}-${box} /bin/echo 'Hello world' || exit 1
+      docker rm ${box_prefix}-${box}-hello-world
+      sleep 2
+    else
+      echo "Skipping building ${box} with the docker provider"
+    fi
   else
     packer build -force -only=${builder}-vagrant-${box}-${box_prefix} template-${box}.json
 
