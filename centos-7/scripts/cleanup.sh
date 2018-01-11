@@ -6,6 +6,7 @@ fi
 echo
 echo 'removing unneeded files and cache...'
 yum -y clean all
+rm -rf /var/cache/yum
 find / -iname VBoxGuestAdditions.iso -delete
 rm -rf /tmp/rubygems-*
 
