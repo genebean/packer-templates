@@ -82,7 +82,7 @@
   "post-processors": [
     {
       "type": "vsphere",
-      "keep_input_artifact": false,
+      "keep_input_artifact": true,
       "host": "{{user `packer_vcenter_host`}}",
       "username": "{{user `packer_vcenter_username`}}",
       "password": "{{user `packer_vcenter_password`}}",

@@ -1,9 +1,13 @@
 {
   "variables": {
     "os": "centos-7",
+    "build_name": "docker-ce",
     "docker_image": "genebean/centos-7-base",
     "docker_user": "genebean",
-    "build_name": "docker-ce"
+    "vagrant_cloud_user": "genebean",
+
+    "cloud_token": "{{ env `VAGRANT_CLOUD_TOKEN` }}",
+    "version": "{{ env `VAGRANT_BOX_VERSION`}}"
   },
   "builders": [
     {
@@ -72,18 +76,29 @@
     }
   ],
   "post-processors": [
-    {
-      "type": "vagrant",
-      "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
-      "override": {
-        "virtualbox": {
-          "output": "boxes/{{user `os`}}-{{user `build_name`}}-virtualbox.box"
-        },
-        "vmware": {
-          "output": "boxes/{{user `os`}}-{{user `build_name`}}-vmware.box"
+    [
+      {
+        "type": "vagrant",
+        "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
+        "override": {
+          "virtualbox": {
+            "output": "boxes/{{user `os`}}-{{user `build_name`}}-virtualbox.box"
+          },
+          "vmware": {
+            "output": "boxes/{{user `os`}}-{{user `build_name`}}-vmware.box"
+          }
         }
+      },
+      {
+        "type": "vagrant-cloud",
+        "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
+        "keep_input_artifact": true,
+        "no_release": false,
+        "box_tag": "{{user `vagrant_cloud_user`}}/{{user `os`}}-{{user `build_name`}}",
+        "access_token": "{{user `cloud_token`}}",
+        "version": "{{user `version`}}"
       }
-    },
+    ],
     {
       "type": "docker-import",
       "only": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
