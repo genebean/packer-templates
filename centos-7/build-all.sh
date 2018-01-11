@@ -11,10 +11,10 @@ box_prefix='centos-7'
 docker_user='genebean'
 
 # build base VM that is used for all boxes
-packer build -force -except=vmware-base-${box_prefix} template-base.json
+packer build -force -except=vmware-base-${box_prefix} template-base.json || exit 1
 echo 'testing Docker image...'
 docker run --name ${box_prefix}-base-hello-world ${docker_user}/${box_prefix}-base /bin/cat /etc/motd || exit 1
-docker rm ${box_prefix}-base-hello-world
+docker rm ${box_prefix}-base-hello-world || exit 1
 
 # ensure the base box was built
 if [ ! -f "output-virtualbox-base-${box_prefix}/packer-virtualbox-base-${box_prefix}.ovf" ]; then
@@ -24,14 +24,7 @@ fi
 
 # build each box
 for box in `cat ${DIR}/box-versions`; do
-  packer build -force -except=vmware-vagrant-${box}-${box_prefix} template-${box}.json
-
-  # check if the box was built
-  if [ ! -f "boxes/${box_prefix}-${box}-virtualbox.box" ]; then
-    # if the box wasn't built try one more time before failing
-    echo "trying again to build ${box_prefix}-${box}-virtualbox.box"
-    packer build -force -except=vmware-vagrant-${box}-${box_prefix} template-${box}.json
-  fi
+  packer build -force -except=vmware-vagrant-${box}-${box_prefix} template-${box}.json || exit 1
 
   # if the box still does not exist then fail.
   if [ ! -f "boxes/${box_prefix}-${box}-virtualbox.box" ]; then
@@ -56,7 +49,7 @@ for box in `cat ${DIR}/box-versions`; do
 
   echo 'testing Docker image...'
   docker run --name ${box_prefix}-${box}-hello-world ${docker_user}/${box_prefix}-${box} /bin/echo 'Hello world' || exit 1
-  docker rm ${box_prefix}-${box}-hello-world
+  docker rm ${box_prefix}-${box}-hello-world || exit 1
 done
 
 tree

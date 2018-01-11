@@ -26,12 +26,12 @@ box_prefix='centos-7'
 docker_user='genebean'
 
 # build base VM that is used for all boxes
-packer build -force -only=${builder}-base-${box_prefix} template-base.json
+packer build -force -only=${builder}-base-${box_prefix} template-base.json || exit 1
 
 if [ "${builder}" == "docker" ]; then
   echo 'testing Docker image...'
   docker run --name ${box_prefix}-base-hello-world ${docker_user}/${box_prefix}-base /bin/cat /etc/motd || exit 1
-  docker rm ${box_prefix}-base-hello-world
+  docker rm ${box_prefix}-base-hello-world || exit 1
   sleep 2
 else
   # ensure the base box was built
@@ -60,24 +60,17 @@ fi
 for box in `cat ${DIR}/box-versions`; do
   if [ "${builder}" == "docker" ]; then
     if [[ "${box}" != *"docker"* ]]; then
-      packer build -force -only=${builder}-${box}-${box_prefix} template-${box}.json
+      packer build -force -only=${builder}-${box}-${box_prefix} template-${box}.json || exit 1
 
       echo 'testing Docker image...'
       docker run --name ${box_prefix}-${box}-hello-world ${docker_user}/${box_prefix}-${box} /bin/echo 'Hello world' || exit 1
-      docker rm ${box_prefix}-${box}-hello-world
+      docker rm ${box_prefix}-${box}-hello-world || exit 1
       sleep 2
     else
       echo "Skipping building ${box} with the docker provider"
     fi
   else
-    packer build -force -only=${builder}-vagrant-${box}-${box_prefix} template-${box}.json
-
-    # check if the box was built
-    if [ ! -f "boxes/${box_prefix}-${box}-${builder}.box" ]; then
-      # if the box wasn't built try one more time before failing
-      echo "trying again to build ${box_prefix}-${box}-${builder}.box"
-      packer build -force -only=${builder}-vagrant-${box}-${box_prefix} template-${box}.json
-    fi
+    packer build -force -only=${builder}-vagrant-${box}-${box_prefix} template-${box}.json || exit 1
 
     # if the box still does not exist then fail.
     if [ ! -f "boxes/${box_prefix}-${box}-${builder}.box" ]; then
