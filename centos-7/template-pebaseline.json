@@ -10,7 +10,7 @@
       "type": "vmware-vmx",
       "vm_name": "packer-vmware-{{user `build_name`}}-{{user `os`}}",
       "headless": true,
-      "source_path": "output-vmware-base-{{user `os`}}/packer-vmware-base-{{user `os`}}.vmx",
+      "source_path": "output-vmware-base-{{user `os`}}/packer-vmware-desktop-base-{{user `os`}}.vmx",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,

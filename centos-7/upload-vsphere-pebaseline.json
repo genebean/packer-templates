@@ -3,7 +3,7 @@
   "variables":
     {
       "template_name": "centos-7.4.1708-x86_64-with-puppet",
-      "version": "0.0.1",
+      "version": "0.0.3",
       "build_name": "pebaseline",
       "os": "centos-7",
 

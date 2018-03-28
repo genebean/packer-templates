@@ -1,24 +1,17 @@
 set -e
 
-hostnamectl set-hostname packer-pebaseline
+hostnamectl set-hostname template-pebaseline
 echo "installing via https://${PACKER_PUPPETMASTER}:8140/packages/current/install.bash"
 curl -s -k "https://${PACKER_PUPPETMASTER}:8140/packages/current/install.bash" | bash
 /opt/puppetlabs/puppet/bin/puppet resource service puppet ensure=stopped enable=false
 
-figlet -f slant "Sign Me!"
-echo
 certname="$(/opt/puppetlabs/puppet/bin/facter fqdn)"
 echo "Run 'sudo puppet cert sign ${certname}' on the master'"
-echo "sleeping for 1 minute..."
-sleep 60
+figlet -f slant "^^ Sign Me! ^^"
+echo "waiting for 1 minute..."
 
-set +e
-/opt/puppetlabs/puppet/bin/puppet agent -t
-/opt/puppetlabs/puppet/bin/puppet agent -t
-if [ $? -eq 1 ]; then
-  echo "puppet exited 1 indicating a failure"
-  exit 1
-fi
+/opt/puppetlabs/puppet/bin/puppet agent --waitforcert=60 --onetime --no-daemonize --no-usecacheonfailure --no-splay --verbose
+/opt/puppetlabs/puppet/bin/puppet agent --onetime --no-daemonize --no-usecacheonfailure --no-splay --verbose
 
 set -e
 /opt/puppetlabs/puppet/bin/puppet resource service puppet ensure=stopped enable=false
@@ -27,7 +20,7 @@ set -e
 rm -rf /etc/puppetlabs/puppet/ssl
 sed -i '/^certname/d' /etc/puppetlabs/puppet/puppet.conf
 sed -i '/^environment/d' /etc/puppetlabs/puppet/puppet.conf
-sed -i '/packer-pebaseline/d' /etc/motd
+sed -i '/template-pebaseline/d' /etc/motd
 sleep 5
 
 figlet -f slant "Clean Up Time"
