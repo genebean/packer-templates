@@ -4,8 +4,8 @@
     "docker_image": "centos:centos7",
     "docker_user": "genebean",
     "build_name": "base",
-    "iso_url": "http://ftp.osuosl.org/pub/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1708.iso",
-    "iso_checksum": "aae20c8052a55cf179af88d9dd35f1a889cd5773"
+    "iso_url": "http://ftp.osuosl.org/pub/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1804.iso",
+    "iso_checksum": "13675c6f74880e7ff3481b91bdaf925ce81bda8f"
   },
   "builders": [
     {
