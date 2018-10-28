@@ -1,9 +1,14 @@
 #!/bin/bash
-rvm_versions=(jruby-9.1 2.4.1 2.2.1 1.9.3)
-rvm_default_version='2.4.1'
+rvm_versions=(jruby-9.2 jruby-9.1 2.6.0 2.5.1 2.4.1 2.2.1 1.9.3)
+rvm_default_version='2.5.1'
+# Make sure gpg folder is created before actually doing stuff with gpg
+gpg2 --list-keys
 # Setup RVM
 curl -#OL https://rvm.io/mpapis.asc || exit 1
-gpg --import mpapis.asc || exit 1
+curl -#OL https://rvm.io/pkuczynski.asc || exit 1
+gpg2 --import mpapis.asc || exit 1
+gpg2 --import pkuczynski.asc || exit 1
+
 su - vagrant -c '\curl -L https://get.rvm.io | sudo bash -s stable' || exit 1
 
 # Verify RVM install
@@ -19,6 +24,9 @@ motd_first_row="Multi-RVM"
 figlet -w 80 -c -f slant "${motd_first_row}" > $motd || exit 1
 figlet -w 80 -c -f slant "by GeneBean" >> $motd || exit 1
 echo $(printf 'RVM versions:') |perl -pe '$sp = " " x ((80 - length) / 2); s/^/$sp/' >> $motd || exit 1
+
+# Install Java for JRuby
+yum -y install java-1.8.0-openjdk
 
 # Setup Ruby
 for rvm_version in ${rvm_versions[@]}; do

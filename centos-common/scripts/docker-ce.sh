@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # Install Docker CE and set permissions for the Vagrant user
-curl -o /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat/jenkins.repo || exit 1
-rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key || exit 1
 yum install -y yum-utils device-mapper-persistent-data lvm2 || exit 1
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || exit 1
 yum install -y docker-ce || exit 1

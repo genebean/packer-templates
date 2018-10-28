@@ -1,11 +1,8 @@
 {
   "variables": {
-    "os": "centos-7",
-    "docker_image": "centos:centos7",
     "docker_user": "genebean",
     "build_name": "base",
-    "iso_url": "http://ftp.osuosl.org/pub/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1804.iso",
-    "iso_checksum": "13675c6f74880e7ff3481b91bdaf925ce81bda8f"
+    "common_scripts": "scripts"
   },
   "builders": [
     {
@@ -13,10 +10,8 @@
       "type": "virtualbox-iso",
       "vm_name": "packer-virtualbox-{{user `build_name`}}-{{user `os`}}",
       "boot_command": [
-        "<tab>",
-        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "<wait5>",
-        " ipv6.disable=1 biosdevname=0 net.ifnames=0 quiet vga=791",
+        "{{user `boot_command_start`}}",
+        "{{user `boot_command_options`}}",
         " text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg",
         "<wait5><enter>"
       ],
@@ -26,7 +21,7 @@
       "headless": true,
       "http_directory": "http",
       "iso_checksum": "{{user `iso_checksum`}}",
-      "iso_checksum_type": "sha1",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
       "iso_url": "{{user `iso_url`}}",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
@@ -45,21 +40,14 @@
       "name": "vmware-{{user `build_name`}}-{{user `os`}}",
       "type": "vmware-iso",
       "vm_name": "packer-vmware-desktop-{{user `build_name`}}-{{user `os`}}",
-      "boot_command": [
-        "<tab>",
-        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "<wait5>",
-        "ipv6.disable=1 biosdevname=0 net.ifnames=0 quiet vga=791",
-        " text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg",
-        "<wait5><enter>"
-      ],
+      "boot_command": "{{user `boot_command`}}",
       "boot_wait": "10s",
       "disk_size": 40520,
       "guest_os_type": "centos-64",
       "headless": true,
       "http_directory": "http",
       "iso_checksum": "{{user `iso_checksum`}}",
-      "iso_checksum_type": "sha1",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
       "iso_url": "{{user `iso_url`}}",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
@@ -83,16 +71,22 @@
   ],
   "provisioners": [
     {
+      "type": "file",
+      "source": "scripts/vars.sh",
+      "destination": "/tmp/vars.sh"
+    },
+    {
       "type": "shell",
       "only": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
-      "script": "scripts/docker-prep.sh"
+      "script": "{{user `common_scripts`}}/docker-prep.sh"
     },
     {
       "type": "shell",
       "scripts": [
-        "scripts/networking.sh",
-        "scripts/base.sh",
-        "scripts/vagrant.sh"
+        "{{user `common_scripts`}}/networking.sh",
+        "{{user `common_scripts`}}/base.sh",
+        "{{user `common_scripts`}}/zsh.sh",
+        "{{user `common_scripts`}}/vagrant.sh"
       ],
       "expect_disconnect": true,
       "override": {
@@ -108,7 +102,7 @@
       "type": "shell",
       "only": [ "virtualbox-{{user `build_name`}}-{{user `os`}}" ],
       "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'",
-      "script": "scripts/virtualbox.sh"
+      "script": "{{user `common_scripts`}}/virtualbox.sh"
     },
     {
       "type": "shell",
@@ -119,7 +113,7 @@
     {
       "type": "shell",
       "scripts": [
-        "scripts/cleanup.sh"
+        "{{user `common_scripts`}}/cleanup.sh"
       ],
       "override": {
         "virtualbox-{{user `build_name`}}-{{user `os`}}": {
@@ -134,7 +128,7 @@
       "type": "shell",
       "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
       "scripts": [
-        "scripts/zerodisk.sh"
+        "{{user `common_scripts`}}/zerodisk.sh"
       ],
       "override": {
         "virtualbox-{{user `build_name`}}-{{user `os`}}": {

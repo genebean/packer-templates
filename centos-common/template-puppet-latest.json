@@ -1,14 +1,15 @@
 {
   "variables": {
-    "os": "centos-6",
-    "docker_image": "genebean/centos-6-base",
-    "docker_user": "genebean",
-    "build_name": "puppet5"
+    "build_name": "puppet-latest",
+    "common_scripts": "scripts",
+    "cloud_token": "{{ env `VAGRANT_CLOUD_TOKEN` }}",
+    "version": "{{ env `VAGRANT_BOX_VERSION`}}"
   },
   "builders": [
     {
       "name": "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}",
       "type": "virtualbox-ovf",
+      "headless": true,
       "source_path": "output-virtualbox-base-{{user `os`}}/packer-virtualbox-base-{{user `os`}}.ovf",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
@@ -22,6 +23,7 @@
     {
       "name": "vmware-vagrant-{{user `build_name`}}-{{user `os`}}",
       "type": "vmware-vmx",
+      "headless": true,
       "source_path": "output-vmware-base-{{user `os`}}/packer-vmware-base-{{user `os`}}.vmx",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
@@ -39,10 +41,15 @@
   ],
   "provisioners": [
     {
+      "type": "file",
+      "source": "scripts/vars.sh",
+      "destination": "/tmp/vars.sh"
+    },
+    {
       "type": "shell",
       "scripts": [
-        "scripts/{{user `build_name`}}.sh",
-        "scripts/cleanup.sh"
+        "{{user `common_scripts`}}/{{user `build_name`}}.sh",
+        "{{user `common_scripts`}}/cleanup.sh"
       ],
       "override": {
         "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}": {
@@ -57,7 +64,7 @@
       "type": "shell",
       "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
       "scripts": [
-        "scripts/zerodisk.sh"
+        "{{user `common_scripts`}}/zerodisk.sh"
       ],
       "override": {
         "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}": {
@@ -70,6 +77,7 @@
     }
   ],
   "post-processors": [
+    [
     {
       "type": "vagrant",
       "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
@@ -82,6 +90,16 @@
         }
       }
     },
+    {
+        "type": "vagrant-cloud",
+        "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
+        "keep_input_artifact": true,
+        "no_release": false,
+        "box_tag": "{{user `vagrant_cloud_user`}}/{{user `os`}}-{{user `build_name`}}",
+        "access_token": "{{user `cloud_token`}}",
+        "version": "{{user `version`}}"
+      }
+    ],
     {
       "type": "docker-import",
       "only": [ "docker-{{user `build_name`}}-{{user `os`}}" ],

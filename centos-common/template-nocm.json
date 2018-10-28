@@ -1,11 +1,7 @@
 {
   "variables": {
-    "os": "centos-7",
-    "build_name": "docker-ce",
-    "docker_image": "genebean/centos-7-base",
-    "docker_user": "genebean",
-    "vagrant_cloud_user": "genebean",
-
+    "build_name": "nocm",
+    "common_scripts": "scripts",
     "cloud_token": "{{ env `VAGRANT_CLOUD_TOKEN` }}",
     "version": "{{ env `VAGRANT_BOX_VERSION`}}"
   },
@@ -13,6 +9,7 @@
     {
       "name": "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}",
       "type": "virtualbox-ovf",
+      "vm_name": "packer-virtualbox-{{user `build_name`}}-{{user `os`}}",
       "headless": true,
       "source_path": "output-virtualbox-base-{{user `os`}}/packer-virtualbox-base-{{user `os`}}.ovf",
       "ssh_username": "vagrant",
@@ -27,6 +24,7 @@
     {
       "name": "vmware-vagrant-{{user `build_name`}}-{{user `os`}}",
       "type": "vmware-vmx",
+      "vm_name": "packer-vmware-{{user `build_name`}}-{{user `os`}}",
       "headless": true,
       "source_path": "output-vmware-base-{{user `os`}}/packer-vmware-base-{{user `os`}}.vmx",
       "ssh_username": "vagrant",
@@ -47,8 +45,7 @@
     {
       "type": "shell",
       "scripts": [
-        "scripts/{{user `build_name`}}.sh",
-        "scripts/cleanup.sh"
+        "{{user `common_scripts`}}/cleanup.sh"
       ],
       "override": {
         "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}": {
@@ -63,7 +60,7 @@
       "type": "shell",
       "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
       "scripts": [
-        "scripts/zerodisk.sh"
+        "{{user `common_scripts`}}/zerodisk.sh"
       ],
       "override": {
         "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}": {
@@ -77,9 +74,9 @@
   ],
   "post-processors": [
     [
-      {
-        "type": "vagrant",
-        "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
+    {
+      "type": "vagrant",
+      "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
         "override": {
           "virtualbox": {
             "output": "boxes/{{user `os`}}-{{user `build_name`}}-virtualbox.box"
@@ -88,8 +85,8 @@
             "output": "boxes/{{user `os`}}-{{user `build_name`}}-vmware.box"
           }
         }
-      },
-      {
+    },
+    {
         "type": "vagrant-cloud",
         "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
         "keep_input_artifact": true,

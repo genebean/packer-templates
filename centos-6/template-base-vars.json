@@ -1,0 +1,10 @@
+{
+  "os": "centos-6",
+  "docker_image": "centos:centos6",
+  "iso_url": "http://ftp.osuosl.org/pub/centos/6/isos/x86_64/CentOS-6.10-x86_64-minimal.iso",
+  "iso_checksum": "7c0dee2a0494dabd84809b72ddb4b761f9ef92b78a506aef709b531c54d30770",
+  "iso_checksum_type": "sha256",
+  "boot_command_start": "<tab><wait5>",
+  "boot_command_options": " quiet vga=791",
+  "common_scripts": "../centos-common/scripts"
+}

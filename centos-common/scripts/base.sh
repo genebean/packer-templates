@@ -1,9 +1,16 @@
+source /tmp/vars.sh
+
 sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
+
+# clean up cache that can cause errors later
+yum clean all
+rm -rf /var/cache/yum/*
 
 # remove unneeded firmware packages
 yum -y remove iwl*
 
-yum -y install epel-release ntpdate yum-presto
+# install deltarpm so to reduce the size of updates downloaded
+yum -y install deltarpm epel-release ntpdate yum-presto $extra_packages
 
 # Ensure date is correct so that yum does not fail due to the time being off
 ntpdate -s time.nist.gov
@@ -18,7 +25,7 @@ yum -y upgrade
 
 # Setup MOTD
 motd='/etc/motd'
-motd_first_row="CentOS 6 Base"
+motd_first_row="CentOS ${os_version} Base"
 
 figlet -w 80 -c -f slant "${motd_first_row}" > $motd || exit 1
 figlet -w 80 -c -f slant "by GeneBean" >> $motd || exit 1
