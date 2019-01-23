@@ -5,18 +5,21 @@ in [Vagrant][vagrant] and [Docker][docker]. By default it will build the Vagrant
 boxes in Virtualbox and Docker format. There are also definitions for VMware boxes
 but these are untested due to issues getting Packer and VMware Player to play
 nice with each other. The files in the repo are laid out
-so that each OS and version combo has a top-level folder. Under each of these
-folders are all the files needed to build that combo in several different
+so that each OS and version combo has a top-level folder. Each os also has a
+common folder where shared code lives. Under each OS version folder are
+the files needed to build that combo in several different
 configurations including:
 - `base`: the common base that the boxes below are built on top of
 - `nocm`: a setup without any configuration management installed
 - `docker-ce`: Docker CE installed and configured
-- `puppet`: Puppet 3.x is installed
+- `puppet-latest`: Latest version of Puppet is installed
 - `puppet5`: Puppet 5.x is installed
-- `puppet-agent`: Puppet 4.x is installed
 - `rvm-multi`: RVM with the following Rubys installed:
+  - jruby-9.2
   - jruby-9.1
-  - 2.4.1 (default)
+  - 2.6.0
+  - 2.5.1 (default)
+  - 2.4.1
   - 2.2.1
   - 1.9.3
 
@@ -66,6 +69,17 @@ The build scripts below all reference a file called `box-versions`. This files
 simply contains the list of templates that each script should loop over so that
 the list is not duplicated between scripts.
 
+### Set the build version to be uploaded
+
+These templates automatically upload the produced boxes so you must define the
+box version
+
+```bash
+export $VAGRANT_BOX_VERSION=x.y.z
+```
+
+_As of now the only way to skip the upload is to edit the JSON files_
+
 ### Build all boxes in all folders
 
 ```bash
@@ -92,9 +106,14 @@ $ ./build-all.sh
 ### Build one box at a time
 
 ```bash
-$ packer build template-base.json # must be run before other templates
-# Replace template-some-type with the type of box you want to build.
-$ packer build template-some-type.json
+builder=virtualbox
+box_prefix=centos-7 # or centos-6
+DIR='../centos-commmon'
+# base must be built before other templates
+$ packer build -force -only=${builder}-base-${box_prefix} -var-file=template-base-vars.json $DIR/template-base.json
+
+box=puppet-latest # or any other template you wish to use
+$ packer build -force -only=${builder}-vagrant-${box}-${box_prefix} -var-file=template-std-vars.json $DIR/template-${box}.json
 ```
 
 ### Build for single platform
@@ -123,7 +142,7 @@ cd packer-templates # repo root folder
 
 ### Supported Packer version
 
-This templates was tested using a packer 1.1.3
+This templates was tested using a packer 1.3.3
 
 
 # Development
