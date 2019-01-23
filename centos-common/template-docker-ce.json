@@ -1,11 +1,7 @@
 {
   "variables": {
-    "os": "centos-7",
-    "build_name": "puppet",
-    "docker_image": "genebean/centos-7-base",
-    "docker_user": "genebean",
-    "vagrant_cloud_user": "genebean",
-
+    "build_name": "docker-ce",
+    "common_scripts": "scripts",
     "cloud_token": "{{ env `VAGRANT_CLOUD_TOKEN` }}",
     "version": "{{ env `VAGRANT_BOX_VERSION`}}"
   },
@@ -45,10 +41,15 @@
   ],
   "provisioners": [
     {
+      "type": "file",
+      "source": "scripts/vars.sh",
+      "destination": "/tmp/vars.sh"
+    },
+    {
       "type": "shell",
       "scripts": [
-        "scripts/{{user `build_name`}}.sh",
-        "scripts/cleanup.sh"
+        "{{user `common_scripts`}}/{{user `build_name`}}.sh",
+        "{{user `common_scripts`}}/cleanup.sh"
       ],
       "override": {
         "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}": {
@@ -63,7 +64,7 @@
       "type": "shell",
       "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
       "scripts": [
-        "scripts/zerodisk.sh"
+        "{{user `common_scripts`}}/zerodisk.sh"
       ],
       "override": {
         "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}": {
