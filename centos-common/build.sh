@@ -40,7 +40,7 @@ else
   # ensure the base box was built
   case ${builder} in
           "virtualbox")
-                  base_extension='ovf'
+                  base_extension='ova'
                   vagrant_provider='virtualbox'
                   ;;
           "vmware")
@@ -56,6 +56,9 @@ else
     echo "Error: can't find output-${builder}-base-${box_prefix}/packer-${builder}-base-${box_prefix}.${base_extension}"
     exit 1
   fi
+
+  # generate the checksum used by remaining builders
+  shasum -a 256 "output-${builder}-base-${box_prefix}/packer-${builder}-base-${box_prefix}.${base_extension}" |cut -d ' ' -f1 > "output-${builder}-base-${box_prefix}/sha256-checksum.txt" 
 fi
 
 

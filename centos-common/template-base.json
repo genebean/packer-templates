@@ -34,7 +34,8 @@
         [ "modifyvm", "{{.Name}}", "--memory", "1024" ],
         [ "modifyvm", "{{.Name}}", "--cpus", "1" ],
         [ "modifyvm", "{{.Name}}", "--audio", "none" ]
-      ]
+      ],
+      "format": "ova"
     },
     {
       "name": "vmware-{{user `build_name`}}-{{user `os`}}",
