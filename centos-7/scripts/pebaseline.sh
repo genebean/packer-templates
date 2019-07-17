@@ -6,11 +6,15 @@ curl -s -k "https://${PACKER_PUPPETMASTER}:8140/packages/current/install.bash" |
 /opt/puppetlabs/puppet/bin/puppet resource service puppet ensure=stopped enable=false
 
 certname="$(/opt/puppetlabs/puppet/bin/facter fqdn)"
-echo "Run 'sudo puppet cert sign ${certname}' on the master'"
+echo
+echo "Run 'sudo /opt/puppetlabs/bin/puppetserver ca sign --certname ${certname}' on the master'"
 figlet -f slant "^^ Sign Me! ^^"
 echo "waiting for 1 minute..."
+echo
 
-/opt/puppetlabs/puppet/bin/puppet agent --waitforcert=60 --onetime --no-daemonize --no-usecacheonfailure --no-splay --verbose
+/opt/puppetlabs/puppet/bin/puppet ssl bootstrap --waitforcert 60
+
+/opt/puppetlabs/puppet/bin/puppet agent --onetime --no-daemonize --no-usecacheonfailure --no-splay --verbose
 /opt/puppetlabs/puppet/bin/puppet agent --onetime --no-daemonize --no-usecacheonfailure --no-splay --verbose
 
 set -e
@@ -25,7 +29,7 @@ sleep 5
 
 figlet -f slant "Clean Up Time"
 echo
-echo "Run 'sudo puppet node purge ${certname}' on the master"
+echo "Run 'sudo /opt/puppetlabs/bin/puppetserver ca clean --certname ${certname}' on the master"
 sleep 15
 
 echo "Resetting up the vagrant user..."
