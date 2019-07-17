@@ -2,7 +2,10 @@
   "variables": {
     "docker_user": "genebean",
     "build_name": "base",
-    "common_scripts": "scripts"
+    "common_scripts": "scripts",
+    "vagrant_guest_os_type": "RedHat_64",
+    "vmware_guest_os_type": "centos6-64",
+    "vmware_hardware_version": "9"
   },
   "builders": [
     {
@@ -17,7 +20,7 @@
       ],
       "boot_wait": "10s",
       "disk_size": 40520,
-      "guest_os_type": "RedHat_64",
+      "guest_os_type": "{{user `vagrant_guest_os_type`}}",
       "headless": true,
       "http_directory": "http",
       "iso_checksum": "{{user `iso_checksum`}}",
@@ -40,11 +43,16 @@
     {
       "name": "vmware-{{user `build_name`}}-{{user `os`}}",
       "type": "vmware-iso",
-      "vm_name": "packer-vmware-desktop-{{user `build_name`}}-{{user `os`}}",
-      "boot_command": "{{user `boot_command`}}",
+      "vm_name": "packer-vmware-{{user `build_name`}}-{{user `os`}}",
+      "boot_command": [
+        "{{user `boot_command_start`}}",
+        "{{user `boot_command_options`}}",
+        " text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg",
+        "<wait5><enter>"
+      ],
       "boot_wait": "10s",
       "disk_size": 40520,
-      "guest_os_type": "centos-64",
+      "guest_os_type": "{{user `vmware_guest_os_type`}}",
       "headless": true,
       "http_directory": "http",
       "iso_checksum": "{{user `iso_checksum`}}",
@@ -56,6 +64,7 @@
       "ssh_wait_timeout": "10000s",
       "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'",
       "tools_upload_flavor": "linux",
+      "version": "{{user `vmware_hardware_version`}}",
       "vmx_data": {
         "memsize": "1024",
         "numvcpus": "1",

@@ -2,7 +2,8 @@
   "variables": {
     "os": "centos-7",
     "build_name": "pebaseline",
-    "packer_puppetmaster": "{{env `PACKER_PUPPETMASTER`}}"
+    "packer_puppetmaster": "{{env `PACKER_PUPPETMASTER`}}",
+    "common_scripts": "scripts"
   },
   "builders": [
     {
@@ -10,7 +11,7 @@
       "type": "vmware-vmx",
       "vm_name": "packer-vmware-{{user `build_name`}}-{{user `os`}}",
       "headless": true,
-      "source_path": "output-vmware-base-{{user `os`}}/packer-vmware-desktop-base-{{user `os`}}.vmx",
+      "source_path": "output-vmware-base-{{user `os`}}/packer-vmware-base-{{user `os`}}.vmx",
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
@@ -27,14 +28,14 @@
       "scripts": [
         "scripts/{{user `build_name`}}.sh",
         "scripts/sshd_config.sh",
-        "scripts/cleanup.sh"
+        "{{user `common_scripts`}}/cleanup.sh"
       ],
       "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     },
     {
       "type": "shell",
       "scripts": [
-        "scripts/zerodisk.sh"
+        "{{user `common_scripts`}}/zerodisk.sh"
       ],
       "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     }

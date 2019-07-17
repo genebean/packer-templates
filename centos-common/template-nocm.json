@@ -76,9 +76,12 @@
   ],
   "post-processors": [
     [
-    {
-      "type": "vagrant",
-      "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
+      {
+        "type": "vagrant",
+        "keep_input_artifact": true,
+        "except": [
+          "docker-{{user `build_name`}}-{{user `os`}}"
+        ],
         "override": {
           "virtualbox": {
             "output": "boxes/{{user `os`}}-{{user `build_name`}}-virtualbox.box"
@@ -100,7 +103,9 @@
     ],
     {
       "type": "docker-import",
-      "only": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
+      "only": [
+        "docker-{{user `build_name`}}-{{user `os`}}"
+      ],
       "repository": "{{user `docker_user`}}/{{user `os`}}-{{user `build_name`}}"
     }
   ]

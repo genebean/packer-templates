@@ -6,5 +6,8 @@
   "iso_checksum_type": "sha256",
   "boot_command_start": "<tab><wait5>",
   "boot_command_options": " quiet vga=791",
-  "common_scripts": "../centos-common/scripts"
+  "common_scripts": "../centos-common/scripts",
+  "vagrant_guest_os_type": "RedHat_64",
+  "vmware_guest_os_type": "centos6-64",
+  "vmware_hardware_version": "14"
 }

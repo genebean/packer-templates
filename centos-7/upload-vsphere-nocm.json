@@ -2,10 +2,11 @@
 
   "variables":
     {
-      "template_name": "centos-7.4.1708-x86_64",
+      "template_name": "centos-7.6.1810-x86_64",
       "version": "0.0.1",
       "build_name": "nocm",
       "os": "centos-7",
+      "common_scripts": "scripts",
 
       "provisioner": "vmware",
       "packer_root_keys": "{{env `PACKER_ROOT_KEYS`}}",
@@ -73,7 +74,7 @@
         "PACKER_ROOT_PW={{user `packer_root_pw`}}"
       ],
       "scripts": [
-        "scripts/cleanup.sh",
+        "{{user `common_scripts`}}/cleanup.sh",
         "scripts/upload-vsphere.sh"
       ]
     }
