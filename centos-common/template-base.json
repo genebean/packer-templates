@@ -95,6 +95,7 @@
       "scripts": [
         "{{user `common_scripts`}}/networking.sh",
         "{{user `common_scripts`}}/base.sh",
+        "{{user `common_scripts`}}/smbus-fix.sh",
         "{{user `common_scripts`}}/zsh.sh",
         "{{user `common_scripts`}}/vagrant.sh"
       ],
