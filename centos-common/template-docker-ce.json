@@ -30,13 +30,6 @@
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
       "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'"
-    },
-    {
-      "name": "docker-{{user `build_name`}}-{{user `os`}}",
-      "type": "docker",
-      "image": "{{user `docker_image`}}",
-      "pull": false,
-      "export_path": "packer-docker-{{user `build_name`}}-{{user `os`}}.tar"
     }
   ],
   "provisioners": [
@@ -62,7 +55,6 @@
     },
     {
       "type": "shell",
-      "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
       "scripts": [
         "{{user `common_scripts`}}/zerodisk.sh"
       ],
@@ -80,9 +72,6 @@
     [
       {
         "type": "vagrant",
-        "except": [
-          "docker-{{user `build_name`}}-{{user `os`}}"
-        ],
         "override": {
           "virtualbox": {
             "output": "boxes/{{user `os`}}-{{user `build_name`}}-virtualbox.box"
@@ -92,11 +81,6 @@
           }
         }
       }
-    ],
-    {
-      "type": "docker-import",
-      "only": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
-      "repository": "{{user `docker_user`}}/{{user `os`}}-{{user `build_name`}}"
-    }
+    ]
   ]
 }

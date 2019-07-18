@@ -12,16 +12,16 @@ if [ -z "$VAGRANT_BOX_VERSION" ]; then
 fi
 
 if [ "$#" -ne 1 ]; then
-  echo "usage: $0 [virtualbox|vmware|docker]"
+  echo "usage: $0 [virtualbox|vmware]"
   exit 1
 fi
 
 case "$1" in
-  virtualbox|vmware|docker )
+  virtualbox|vmware )
     builder=$1
     ;;
   * )
-    echo "The only builders that are currently supported are virtualbox, vmware, and docker."
+    echo "The only builders that are currently supported are virtualbox and vmware."
     exit 1
 esac
 

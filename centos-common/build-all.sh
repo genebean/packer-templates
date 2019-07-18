@@ -14,15 +14,11 @@ case "$1" in
     exit 1
 esac
 
-docker_user='genebean'
 
 DIR="$(cd "$(dirname "$0")" && pwd -P)"
 
 # build base VM that is used for all boxes
 packer build -force -except=vmware-base-${box_prefix} -var-file=template-base-vars.json $DIR/template-base.json || exit 1
-echo 'testing Docker image...'
-docker run --name ${box_prefix}-base-hello-world ${docker_user}/${box_prefix}-base /bin/cat /etc/motd || exit 1
-docker rm ${box_prefix}-base-hello-world || exit 1
 
 # ensure the base box was built
 if [ ! -f "output-virtualbox-base-${box_prefix}/packer-virtualbox-base-${box_prefix}.ovf" ]; then
@@ -54,13 +50,8 @@ for box in `cat ${DIR}/box-versions`; do
   echo 'removing files made by Vagrant...'
   rm -rf .vagrant
   rm -f Vagrantfile
-
-  echo 'testing Docker image...'
-  docker run --name ${box_prefix}-${box}-hello-world ${docker_user}/${box_prefix}-${box} /bin/echo 'Hello world' || exit 1
-  docker rm ${box_prefix}-${box}-hello-world || exit 1
 done
 
 tree
-docker images
 
 echo 'all boxes built.'

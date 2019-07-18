@@ -15,11 +15,7 @@ yum -y install deltarpm epel-release ntpdate yum-presto $extra_packages
 # Ensure date is correct so that yum does not fail due to the time being off
 ntpdate -s time.nist.gov
 
-yum -y install binutils figlet fuse-libs gcc gcc-c++ make net-tools perl redhat-lsb-core vim yum-utils
-
-if [ "$PACKER_BUILDER_TYPE" != "docker" ]; then
-  yum -y install dkms kernel-devel-`uname -r`
-fi
+yum -y install binutils dkms figlet fuse-libs gcc gcc-c++ kernel-devel-`uname -r` make net-tools perl redhat-lsb-core vim yum-utils
 
 yum -y upgrade
 
@@ -36,9 +32,7 @@ echo 'Testing the MOTD...'
 echo
 cat $motd
 
-if [ "$PACKER_BUILDER_TYPE" != "docker" ]; then
-  echo "rebooting..."
-  reboot
-  echo "Sleeping for 60 seconds..."
-  sleep 60
-fi
+echo "rebooting..."
+reboot
+echo "Sleeping for 60 seconds..."
+sleep 60

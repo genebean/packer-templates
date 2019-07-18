@@ -23,5 +23,3 @@ fi
 echo
 ls */boxes/
 echo
-docker images
-
