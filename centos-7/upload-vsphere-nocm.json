@@ -2,7 +2,7 @@
 
   "variables":
     {
-      "template_name": "centos-7.6.1810-x86_64",
+      "template_name": "centos-7.6.1810",
       "version": "0.0.1",
       "build_name": "nocm",
       "os": "centos-7",
