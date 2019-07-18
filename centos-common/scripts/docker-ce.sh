@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /tmp/vars.sh
+
 # Install Docker CE and set permissions for the Vagrant user
 yum install -y yum-utils device-mapper-persistent-data lvm2 || exit 1
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || exit 1
