@@ -42,10 +42,12 @@ else
           "virtualbox")
                   base_extension='ova'
                   vagrant_provider='virtualbox'
+                  vagrant_up_provider='virtualbox'
                   ;;
           "vmware")
                   base_extension='vmx'
-                  vagrant_provider='vmware_fusion'
+                  vagrant_provider='vmware_desktop'
+                  vagrant_up_provider='vmware_fusion'
                   ;;
           *)
                   echo "Not sure what extension the ${builder} builder creates... update the case statement in build.sh"
@@ -89,15 +91,14 @@ for box in `cat ${DIR}/../${box_prefix}/box-versions`; do
 
     vagrant box add boxes/${box_prefix}-${box}-${builder}.box --name ${box_prefix}-${box} -f --provider ${vagrant_provider}  || exit 1
     vagrant init -m ${box_prefix}-${box}  || exit 1
-    vagrant up || exit 1
+    vagrant up --provider ${vagrant_up_provider} || exit 1
     vagrant ssh -c 'cat /etc/motd' || exit 1
     sleep 2
     vagrant destroy -f || exit 1
     vagrant box remove ${box_prefix}-${box} -f --provider ${vagrant_provider} || exit 1
 
     echo 'removing files made by Vagrant...'
-    rm -rf .vagrant
-    rm -f Vagrantfile
+    rm -rf .vagrant Vagrantfile
   fi
 
 done

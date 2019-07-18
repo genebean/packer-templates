@@ -15,7 +15,7 @@ yum -y install deltarpm epel-release ntpdate yum-presto $extra_packages
 # Ensure date is correct so that yum does not fail due to the time being off
 ntpdate -s time.nist.gov
 
-yum -y install binutils figlet fuse-libs gcc gcc-c++ make net-tools perl vim yum-utils
+yum -y install binutils figlet fuse-libs gcc gcc-c++ make net-tools perl redhat-lsb-core vim yum-utils
 
 if [ "$PACKER_BUILDER_TYPE" != "docker" ]; then
   yum -y install dkms kernel-devel-`uname -r`
