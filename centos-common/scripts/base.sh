@@ -24,7 +24,7 @@ motd='/etc/motd'
 motd_first_row="CentOS ${os_version} Base"
 
 figlet -w 80 -c -f slant "${motd_first_row}" > $motd || exit 1
-figlet -w 80 -c -f slant "by GeneBean" >> $motd || exit 1
+figlet -w 80 -c -f slant "by ${vagrant_user}" >> $motd || exit 1
 echo $(printf 'Created on '; date +"%a %B %d, %Y") |perl -pe '$sp = " " x ((80 - length) / 2); s/^/$sp/' >> $motd || exit 1
 echo >> $motd || exit 1
 
