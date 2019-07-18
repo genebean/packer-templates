@@ -1,9 +1,7 @@
 {
   "variables": {
     "build_name": "docker-ce",
-    "common_scripts": "scripts",
-    "cloud_token": "{{ env `VAGRANT_CLOUD_TOKEN` }}",
-    "version": "{{ env `VAGRANT_BOX_VERSION`}}"
+    "common_scripts": "scripts"
   },
   "builders": [
     {
@@ -82,7 +80,9 @@
     [
       {
         "type": "vagrant",
-        "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
+        "except": [
+          "docker-{{user `build_name`}}-{{user `os`}}"
+        ],
         "override": {
           "virtualbox": {
             "output": "boxes/{{user `os`}}-{{user `build_name`}}-virtualbox.box"
@@ -91,15 +91,6 @@
             "output": "boxes/{{user `os`}}-{{user `build_name`}}-vmware.box"
           }
         }
-      },
-      {
-        "type": "vagrant-cloud",
-        "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
-        "keep_input_artifact": true,
-        "no_release": false,
-        "box_tag": "{{user `vagrant_cloud_user`}}/{{user `os`}}-{{user `build_name`}}",
-        "access_token": "{{user `cloud_token`}}",
-        "version": "{{user `version`}}"
       }
     ],
     {
