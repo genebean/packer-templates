@@ -7,7 +7,7 @@ if [ "$1" = "-p" ]; then
   echo 'All builds will run in paralel starting in 5 seconds...'
   sleep 5
 
-  for os in `ls */build-all.sh`; do
+  for os in `ls */build-all.sh |grep -v common`; do
     ./${os} &
   done
 else
@@ -15,7 +15,7 @@ else
   echo 'All builds will run in sequentially starting in 5 seconds...'
   sleep 5
 
-  for os in `ls */build-all.sh`; do
+  for os in `ls */build-all.sh |grep -v common`; do
     ./${os}
   done
 fi
