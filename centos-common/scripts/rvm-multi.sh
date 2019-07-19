@@ -1,4 +1,7 @@
 #!/bin/bash
+
+source /tmp/vars.sh
+
 rvm_versions=(jruby-9.2 jruby-9.1 2.6.0 2.5.1 2.4.1 2.2.1)
 rvm_default_version='2.5.1'
 # Make sure gpg folder is created before actually doing stuff with gpg
@@ -22,7 +25,7 @@ motd='/etc/motd'
 motd_first_row="Multi-RVM"
 
 figlet -w 80 -c -f slant "${motd_first_row}" > $motd || exit 1
-figlet -w 80 -c -f slant "by GeneBean" >> $motd || exit 1
+figlet -w 80 -c -f slant "by ${vagrant_user}" >> $motd || exit 1
 echo $(printf 'RVM versions:') |perl -pe '$sp = " " x ((80 - length) / 2); s/^/$sp/' >> $motd || exit 1
 
 # Install Java for JRuby

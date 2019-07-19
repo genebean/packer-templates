@@ -1,8 +1,5 @@
 {
     "os": "centos-6",
-    "docker_image": "genebean/centos-6-base",
-    "docker_user": "genebean",
-    "vagrant_cloud_user": "genebean",
     "common_scripts": "../centos-common/scripts"
 }
 

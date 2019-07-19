@@ -1,9 +1,7 @@
 {
   "variables": {
     "build_name": "rvm-multi",
-    "common_scripts": "scripts",
-    "cloud_token": "{{ env `VAGRANT_CLOUD_TOKEN` }}",
-    "version": "{{ env `VAGRANT_BOX_VERSION`}}"
+    "common_scripts": "scripts"
   },
   "builders": [
     {
@@ -32,13 +30,6 @@
       "ssh_port": 22,
       "ssh_wait_timeout": "10000s",
       "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'"
-    },
-    {
-      "name": "docker-{{user `build_name`}}-{{user `os`}}",
-      "type": "docker",
-      "image": "{{user `docker_image`}}",
-      "pull": false,
-      "export_path": "packer-docker-{{user `build_name`}}-{{user `os`}}.tar"
     }
   ],
   "provisioners": [
@@ -64,7 +55,6 @@
     },
     {
       "type": "shell",
-      "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
       "scripts": [
         "{{user `common_scripts`}}/zerodisk.sh"
       ],
@@ -80,32 +70,17 @@
   ],
   "post-processors": [
     [
-    {
-      "type": "vagrant",
-      "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
-      "override": {
-        "virtualbox": {
-          "output": "boxes/{{user `os`}}-{{user `build_name`}}-virtualbox.box"
-        },
-        "vmware": {
-          "output": "boxes/{{user `os`}}-{{user `build_name`}}-vmware.box"
+      {
+        "type": "vagrant",
+        "override": {
+          "virtualbox": {
+            "output": "boxes/{{user `os`}}-{{user `build_name`}}-virtualbox.box"
+          },
+          "vmware": {
+            "output": "boxes/{{user `os`}}-{{user `build_name`}}-vmware.box"
+          }
         }
       }
-    },
-    {
-        "type": "vagrant-cloud",
-        "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
-        "keep_input_artifact": true,
-        "no_release": false,
-        "box_tag": "{{user `vagrant_cloud_user`}}/{{user `os`}}-{{user `build_name`}}",
-        "access_token": "{{user `cloud_token`}}",
-        "version": "{{user `version`}}"
-      }
-    ],
-    {
-      "type": "docker-import",
-      "only": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
-      "repository": "{{user `docker_user`}}/{{user `os`}}-{{user `build_name`}}"
-    }
+    ]
   ]
 }

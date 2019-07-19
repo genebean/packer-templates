@@ -1,7 +1,5 @@
-if [ "$PACKER_BUILDER_TYPE" != "docker" ]; then
-  echo 'removing old kernels...'
-  package-cleanup --oldkernels --count 1 -y
-fi
+echo 'removing old kernels...'
+package-cleanup --oldkernels --count 1 -y
 
 echo
 echo 'removing unneeded files and cache...'

@@ -1,6 +1,5 @@
 {
   "variables": {
-    "docker_user": "genebean",
     "build_name": "base",
     "common_scripts": "scripts",
     "vagrant_guest_os_type": "RedHat_64",
@@ -70,13 +69,6 @@
         "numvcpus": "1",
         "cpuid.coresPerSocket": "1"
       }
-    },
-    {
-      "name": "docker-{{user `build_name`}}-{{user `os`}}",
-      "type": "docker",
-      "image": "{{user `docker_image`}}",
-      "pull": true,
-      "export_path": "packer-docker-{{user `build_name`}}-{{user `os`}}.tar"
     }
   ],
   "provisioners": [
@@ -84,11 +76,6 @@
       "type": "file",
       "source": "scripts/vars.sh",
       "destination": "/tmp/vars.sh"
-    },
-    {
-      "type": "shell",
-      "only": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
-      "script": "{{user `common_scripts`}}/docker-prep.sh"
     },
     {
       "type": "shell",
@@ -137,7 +124,6 @@
     },
     {
       "type": "shell",
-      "except": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
       "scripts": [
         "{{user `common_scripts`}}/zerodisk.sh"
       ],
@@ -149,13 +135,6 @@
           "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
         }
       }
-    }
-  ],
-  "post-processors": [
-    {
-      "type": "docker-import",
-      "only": [ "docker-{{user `build_name`}}-{{user `os`}}" ],
-      "repository": "{{user `docker_user`}}/{{user `os`}}-{{user `build_name`}}"
     }
   ]
 }
