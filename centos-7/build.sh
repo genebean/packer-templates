@@ -8,6 +8,8 @@ if [ "$#" -ne 1 ]; then
   exit 1
 fi
 
+rm -rf .vagrant Vagrantfile
+
 case "$1" in
   virtualbox|vmware )
     builder=$1
