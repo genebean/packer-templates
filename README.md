@@ -96,7 +96,7 @@ $ ./build-all.sh
 ```bash
 builder=virtualbox
 box_prefix=centos-7 # or centos-6
-DIR='../centos-commmon'
+DIR='../centos-common'
 # base must be built before other templates
 $ packer build -force -only=${builder}-base-${box_prefix} -var-file=template-base-vars.json $DIR/template-base.json
 
