@@ -80,6 +80,6 @@ for box in `cat ${DIR}/../${box_prefix}/box-versions`; do
   rm -rf .vagrant Vagrantfile
 done
 
-tree
+tree -L 2 
 
 echo 'all boxes built.'
