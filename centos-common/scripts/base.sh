@@ -6,16 +6,19 @@ sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
 yum clean all
 rm -rf /var/cache/yum/*
 
-# remove unneeded firmware packages
-yum -y remove iwl*
-
 # install deltarpm so to reduce the size of updates downloaded
-yum -y install deltarpm epel-release ntpdate yum-presto $extra_packages
+yum -y install deltarpm epel-release ntpdate tuned yum-presto $extra_packages
+
+echo 'configure tuned as virtual-guest'
+tuned-adm profile virtual-guest
+
+# get new entries for the cache that includes epel
+yum makecache fast
 
 # Ensure date is correct so that yum does not fail due to the time being off
 ntpdate -s time.nist.gov
 
-yum -y install binutils dkms figlet fuse-libs gcc gcc-c++ kernel-devel-`uname -r` make net-tools perl redhat-lsb-core vim yum-utils
+yum -y install binutils dkms figlet fuse-libs gcc gcc-c++ kernel-devel-`uname -r` make net-tools perl policycoreutils-python redhat-lsb-core vim yum-utils
 
 yum -y upgrade
 

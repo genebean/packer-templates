@@ -42,6 +42,7 @@
     {
       "type": "shell",
       "scripts": [
+        "{{user `common_scripts`}}/make-cache.sh",
         "{{user `common_scripts`}}/{{user `build_name`}}.sh",
         "{{user `common_scripts`}}/cleanup.sh"
       ],

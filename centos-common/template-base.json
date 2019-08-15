@@ -106,7 +106,8 @@
       "type": "shell",
       "only": [ "vmware-{{user `build_name`}}-{{user `os`}}" ],
       "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'",
-      "script": "scripts/vmware.sh"
+      "script": "{{user `common_scripts`}}/vmware.sh",
+      "expect_disconnect": true
     },
     {
       "type": "shell",
