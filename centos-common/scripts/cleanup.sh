@@ -11,12 +11,16 @@ rm -f /tmp/vars.sh
 
 echo
 echo 'removing persistent net rules from udev...'
-rm -f /etc/udev/rules.d/70*
+rm -rf /etc/udev/rules.d/70*
 
 echo
 echo 'removing MAC and UUID from network startup script...'
 sed -i '/^HWADDR=.*$/d' /etc/sysconfig/network-scripts/ifcfg-*
 sed -i '/^UUID=.*$/d' /etc/sysconfig/network-scripts/ifcfg-*
+
+echo
+echo 'removing ssh keys'
+rm -rf /etc/ssh/ssh_host_*
 
 echo
 echo 'finishing up...'
