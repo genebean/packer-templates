@@ -1,6 +1,4 @@
-![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/genebean/packer-templates)
-
-# Overview of genebean/packer-templates
+# Overview of genebean/packer-templates ![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/genebean/packer-templates)
 
 This repo contains my [Packer][packer] templates for building bases boxes used in [Vagrant][vagrant]. By default it will build the Vagrant boxes in Virtualbox. There are also definitions for VMware boxes but these are not as heavily tested due to only having VMware at work. 
 
