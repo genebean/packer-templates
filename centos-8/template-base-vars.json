@@ -1,0 +1,13 @@
+{
+  "os": "centos-8",
+  "iso_url": "http://ftp.osuosl.org/pub/centos/8/isos/x86_64/CentOS-8.2.2004-x86_64-minimal.iso",
+  "iso_checksum": "47ab14778c823acae2ee6d365d76a9aed3f95bb8d0add23a06536b58bb5293c0",
+  "iso_checksum_type": "sha256",
+  "boot_command_start": "<tab><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><wait5>",
+  "boot_command_options": " biosdevname=0 net.ifnames=0 quiet vga=791",
+  "common_scripts": "../centos-common/scripts",
+  "vagrant_guest_os_type": "RedHat_64",
+  "vmware_guest_os_type": "centos8-64",
+  "vmware_hardware_version": "14"
+}
+

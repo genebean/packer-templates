@@ -3,17 +3,17 @@
 DIR="$(cd "$(dirname "$0")" && pwd -P)"
 
 if [ "$#" -ne 1 ]; then
-  echo "usage: $0 [6|7]"
+  echo "usage: $0 [6|7|8]"
   exit 1
 fi
 
 case "$1" in
-  6|7 )
+  6|7|8 )
     # this is the first part of each box's name
     box_prefix="centos-${1}"
     ;;
   * )
-    echo "The only os versions that are currently supported are 6 and 7."
+    echo "The only os versions that are currently supported are 6, 7, and 8."
     exit 1
 esac
 
