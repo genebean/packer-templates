@@ -2,12 +2,12 @@
 # This file is here to undo any changes made during the puppet run
 ######
 cat <<EOF > /etc/ssh/sshd_config
-#	$OpenBSD: sshd_config,v 1.93 2014/01/10 05:59:19 djm Exp $
+#	$OpenBSD: sshd_config,v 1.103 2018/04/09 20:41:22 tj Exp $
 
 # This is the sshd server system-wide configuration file.  See
 # sshd_config(5) for more information.
 
-# This sshd was compiled with PATH=/usr/local/bin:/usr/bin
+# This sshd was compiled with PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
 
 # The strategy used for options in the default sshd_config shipped with
 # OpenSSH is to specify options with their default value where
@@ -23,26 +23,23 @@ cat <<EOF > /etc/ssh/sshd_config
 #ListenAddress 0.0.0.0
 #ListenAddress ::
 
-# The default requires explicit activation of protocol 1
-#Protocol 2
-
-# HostKey for protocol version 1
-#HostKey /etc/ssh/ssh_host_key
-# HostKeys for protocol version 2
 HostKey /etc/ssh/ssh_host_rsa_key
-#HostKey /etc/ssh/ssh_host_dsa_key
 HostKey /etc/ssh/ssh_host_ecdsa_key
 HostKey /etc/ssh/ssh_host_ed25519_key
-
-# Lifetime and size of ephemeral version 1 server key
-#KeyRegenerationInterval 1h
-#ServerKeyBits 1024
 
 # Ciphers and keying
 #RekeyLimit default none
 
+# System-wide Crypto policy:
+# This system is following system-wide crypto policy. The changes to
+# Ciphers, MACs, KexAlgoritms and GSSAPIKexAlgorithsm will not have any
+# effect here. They will be overridden by command-line options passed on
+# the server start up.
+# To opt out, uncomment a line with redefinition of  CRYPTO_POLICY=
+# variable in  /etc/sysconfig/sshd  to overwrite the policy.
+# For more information, see manual page for update-crypto-policies(8).
+
 # Logging
-# obsoletes QuietMode and FascistLogging
 #SyslogFacility AUTH
 SyslogFacility AUTHPRIV
 #LogLevel INFO
@@ -50,12 +47,11 @@ SyslogFacility AUTHPRIV
 # Authentication:
 
 #LoginGraceTime 2m
-#PermitRootLogin yes
+PermitRootLogin yes
 #StrictModes yes
 #MaxAuthTries 6
 #MaxSessions 10
 
-#RSAAuthentication yes
 #PubkeyAuthentication yes
 
 # The default is to check both .ssh/authorized_keys and .ssh/authorized_keys2
@@ -68,11 +64,9 @@ AuthorizedKeysFile	.ssh/authorized_keys
 #AuthorizedKeysCommandUser nobody
 
 # For this to work you will also need host keys in /etc/ssh/ssh_known_hosts
-#RhostsRSAAuthentication no
-# similar for protocol version 2
 #HostbasedAuthentication no
 # Change to yes if you don't trust ~/.ssh/known_hosts for
-# RhostsRSAAuthentication and HostbasedAuthentication
+# HostbasedAuthentication
 #IgnoreUserKnownHosts no
 # Don't read the user's ~/.rhosts and ~/.shosts files
 #IgnoreRhosts yes
@@ -109,7 +103,7 @@ GSSAPICleanupCredentials no
 # If you just want the PAM account and session checks to run without
 # PAM authentication, then enable this but set PasswordAuthentication
 # and ChallengeResponseAuthentication to 'no'.
-# WARNING: 'UsePAM no' is not supported in Red Hat Enterprise Linux and may cause several
+# WARNING: 'UsePAM no' is not supported in Fedora and may cause several
 # problems.
 UsePAM yes
 
@@ -120,17 +114,18 @@ X11Forwarding yes
 #X11DisplayOffset 10
 #X11UseLocalhost yes
 #PermitTTY yes
-#PrintMotd yes
+
+# It is recommended to use pam_motd in /etc/pam.d/sshd instead of PrintMotd,
+# as it is more configurable and versatile than the built-in version.
+PrintMotd no
+
 #PrintLastLog yes
 #TCPKeepAlive yes
-#UseLogin no
-UsePrivilegeSeparation sandbox		# Default for new installations.
 #PermitUserEnvironment no
 #Compression delayed
 #ClientAliveInterval 0
 #ClientAliveCountMax 3
-#ShowPatchLevel no
-#UseDNS yes
+#UseDNS no
 #PidFile /var/run/sshd.pid
 #MaxStartups 10:30:100
 #PermitTunnel no
@@ -155,6 +150,4 @@ Subsystem	sftp	/usr/libexec/openssh/sftp-server
 #	AllowTcpForwarding no
 #	PermitTTY no
 #	ForceCommand cvs server
-
-AddressFamily inet
 EOF
