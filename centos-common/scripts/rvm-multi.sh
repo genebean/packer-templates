@@ -2,8 +2,8 @@
 
 source /tmp/vars.sh
 
-rvm_versions=(jruby-9.2 jruby-9.1 2.6.0 2.5.1 2.4.1 2.2.1)
-rvm_default_version='2.5.1'
+rvm_versions=(jruby-9.2 jruby-9.1 2.7 2.5.7)
+rvm_default_version='2.7'
 # Make sure gpg folder is created before actually doing stuff with gpg
 gpg2 --list-keys
 # Setup RVM

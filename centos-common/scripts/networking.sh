@@ -2,14 +2,12 @@
 
 major_version="`sed 's/^.\+ release \([.0-9]\+\).*/\1/' /etc/redhat-release | awk -F. '{print $1}'`";
 
-if [ "$major_version" -ge 6 ]; then
+if [ "$major_version" -eq 7 ]; then
     # Fix slow DNS:
     # Add 'single-request-reopen' so it is included when /etc/resolv.conf is
     # generated
     # https://access.redhat.com/site/solutions/58625 (subscription required)
     echo 'RES_OPTIONS="single-request-reopen"' >>/etc/sysconfig/network;
-    service network restart;
-    echo 'Slow DNS fix applied (single-request-reopen)';
 fi
 
 # Fix for https://github.com/CentOS/sig-cloud-instance-build/issues/38
@@ -20,6 +18,14 @@ ONBOOT="yes"
 TYPE="Ethernet"
 PERSISTENT_DHCLIENT="yes"
 EOF
+
+if [ "$major_version" -ge 8 ]; then
+  nmcli connection reload
+else
+  service network restart;
+fi
+
+echo 'Slow DNS fix applied (single-request-reopen)';
 
 # SSH fixes relted to networking
 echo 'Setting UseDNS to no in sshd_config'

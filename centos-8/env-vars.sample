@@ -1,0 +1,22 @@
+#
+# Update this file and source it prior to trying to upload to vSphere
+#
+
+export PACKER_PUPPETMASTER='puppet.example.com'
+
+# the keys in this folder are added to the root account. The *.pub keys are added to the authorized_keys file.
+export PACKER_ROOT_KEYS="../../../Downloads/root_ssh_keys"
+
+export PACKER_VCENTER_HOST='vcenter.example.com'
+export PACKER_VCENTER_USERNAME='administrator@vsphere.local'
+export PACKER_VCENTER_DC='dc1'
+export PACKER_VCENTER_CLUSTER='cluster1'
+export PACKER_VCENTER_DATASTORE='array1'
+export PACKER_VCENTER_FOLDER='packer'
+export PACKER_VCENTER_NET='some_network'
+export PACKER_VCENTER_INSECURE=true
+export PACKER_VCENTER_OVEERWRITE=false
+
+# Passwords needed to make everything work:
+export PACKER_ROOT_PW='some_password'
+export PACKER_VCENTER_PASSWORD='another_password'

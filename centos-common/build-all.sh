@@ -3,17 +3,17 @@
 DIR="$(cd "$(dirname "$0")" && pwd -P)"
 
 if [ "$#" -ne 1 ]; then
-  echo "usage: $0 [6|7]"
+  echo "usage: $0 [6|7|8]"
   exit 1
 fi
 
 case "$1" in
-  6|7 )
+  6|7|8 )
     # this is the first part of each box's name
     box_prefix="centos-${1}"
     ;;
   * )
-    echo "The only os versions that are currently supported are 6 and 7."
+    echo "The only os versions that are currently supported are 6, 7, and 8."
     exit 1
 esac
 
@@ -75,6 +75,7 @@ test_with_vagrant() {
     echo "testing ${box_prefix}-${box}-${builder}.box with Vagrant"
     sleep 2
 
+    rm -rf .vagrant Vagrantfile
     vagrant box add boxes/${box_prefix}-${box}-${builder}.box --name ${box_prefix}-${box} -f --provider ${vagrant_provider}  || return 1
     vagrant init -m ${box_prefix}-${box}  || return 1
     vagrant up --provider ${vagrant_up_provider} || return 1
@@ -95,7 +96,7 @@ test_base_boxes_built $box_prefix || exit 1
 # build each box
 for box in `cat ${DIR}/../${box_prefix}/box-versions`; do
   packer build -force -var-file=template-std-vars.json $DIR/template-${box}.json || exit 1
-  test_with_vagrant $box_prefix $box || exit 1
+  # test_with_vagrant $box_prefix $box || exit 1
 done
 
 tree -L 2 

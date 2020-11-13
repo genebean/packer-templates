@@ -1,79 +1,41 @@
 {
-  "variables": {
-    "build_name": "docker-ce",
-    "common_scripts": "scripts"
-  },
   "builders": [
     {
-      "name": "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}",
-      "type": "virtualbox-ovf",
+      "checksum": "file:output-virtualbox-base-{{user `os`}}/sha256-checksum.txt",
       "headless": true,
+      "name": "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}",
+      "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'",
       "source_path": "output-virtualbox-base-{{user `os`}}/packer-virtualbox-base-{{user `os`}}.ova",
-      "checksum": "output-virtualbox-base-{{user `os`}}/sha256-checksum.txt",
-      "checksum_type": "file",
-      "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
-      "ssh_wait_timeout": "10000s",
-      "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'",
+      "ssh_timeout": "10000s",
+      "ssh_username": "vagrant",
+      "type": "virtualbox-ovf",
       "vboxmanage": [
-        [ "modifyvm", "{{.Name}}", "--audio", "none" ]
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--audio",
+          "none"
+        ]
       ]
     },
     {
-      "name": "vmware-vagrant-{{user `build_name`}}-{{user `os`}}",
-      "type": "vmware-vmx",
       "headless": true,
+      "name": "vmware-vagrant-{{user `build_name`}}-{{user `os`}}",
+      "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'",
       "source_path": "output-vmware-base-{{user `os`}}/packer-vmware-base-{{user `os`}}.vmx",
-      "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_port": 22,
-      "ssh_wait_timeout": "10000s",
-      "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'",
+      "ssh_timeout": "10000s",
+      "ssh_username": "vagrant",
+      "type": "vmware-vmx",
       "vmx_remove_ethernet_interfaces": true
-    }
-  ],
-  "provisioners": [
-    {
-      "type": "file",
-      "source": "scripts/vars.sh",
-      "destination": "/tmp/vars.sh"
-    },
-    {
-      "type": "shell",
-      "scripts": [
-        "{{user `common_scripts`}}/make-cache.sh",
-        "{{user `common_scripts`}}/{{user `build_name`}}.sh",
-        "{{user `common_scripts`}}/cleanup.sh"
-      ],
-      "override": {
-        "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}": {
-          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-        },
-        "vmware-vagrant-{{user `build_name`}}-{{user `os`}}": {
-          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-        }
-      }
-    },
-    {
-      "type": "shell",
-      "scripts": [
-        "{{user `common_scripts`}}/zerodisk.sh"
-      ],
-      "override": {
-        "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}": {
-          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-        },
-        "vmware-vagrant-{{user `build_name`}}-{{user `os`}}": {
-          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
-        }
-      }
     }
   ],
   "post-processors": [
     [
       {
-        "type": "vagrant",
         "override": {
           "virtualbox": {
             "output": "boxes/{{user `os`}}-{{user `build_name`}}-virtualbox.box"
@@ -81,8 +43,51 @@
           "vmware": {
             "output": "boxes/{{user `os`}}-{{user `build_name`}}-vmware.box"
           }
-        }
+        },
+        "type": "vagrant"
       }
     ]
-  ]
+  ],
+  "provisioners": [
+    {
+      "destination": "/tmp/vars.sh",
+      "source": "scripts/vars.sh",
+      "type": "file"
+    },
+    {
+      "override": {
+        "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}": {
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        },
+        "vmware-vagrant-{{user `build_name`}}-{{user `os`}}": {
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        }
+      },
+      "scripts": [
+        "{{user `common_scripts`}}/make-cache.sh",
+        "{{user `common_scripts`}}/{{user `build_name`}}.sh",
+        "{{user `common_scripts`}}/cleanup.sh"
+      ],
+      "type": "shell"
+    },
+    {
+      "override": {
+        "virtualbox-vagrant-{{user `build_name`}}-{{user `os`}}": {
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        },
+        "vmware-vagrant-{{user `build_name`}}-{{user `os`}}": {
+          "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+        }
+      },
+      "scripts": [
+        "{{user `common_scripts`}}/zerodisk.sh"
+      ],
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "build_name": "docker-ce",
+    "common_scripts": "scripts"
+  }
 }
+
