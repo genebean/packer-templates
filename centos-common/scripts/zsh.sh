@@ -16,9 +16,12 @@ sed -i "s/brew\sbundler/bundler/" /home/vagrant/.zshrc
 # the custom config looks for .private-env so let's make it
 touch /home/vagrant/.private-env
 
+# download customized themes
+mkdir -p /home/vagrant/repos/customized-oh-my-zsh
+git clone --progress --verbose https://github.com/genebean/my-oh-zsh-themes.git /home/vagrant/repos/customized-oh-my-zsh/themes
+
 # install oh-my-zsh
 git clone --progress --verbose https://github.com/robbyrussell/oh-my-zsh.git /home/vagrant/.oh-my-zsh
 
 # fix permissions
 chown -R vagrant:vagrant /home/vagrant
-
