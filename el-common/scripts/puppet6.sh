@@ -3,7 +3,7 @@
 source /tmp/vars.sh
 
 # Puppet Agent
-yum install -y https://yum.puppetlabs.com/puppet5/puppet5-release-el-$os_version.noarch.rpm
+yum install -y https://yum.puppetlabs.com/puppet6/puppet6-release-el-$os_version.noarch.rpm
 yum -y install puppet-agent
 source /etc/profile.d/puppet-agent.sh
 puppet resource service puppet ensure=stopped enable=false || exit 1

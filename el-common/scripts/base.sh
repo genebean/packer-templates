@@ -2,6 +2,7 @@ source /tmp/vars.sh
 
 sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
 
+el_variant=$(cat /etc/redhat-release |cut -d ' ' -f1)
 major_version="`sed 's/^.\+ release \([.0-9]\+\).*/\1/' /etc/redhat-release | awk -F. '{print $1}'`";
 
 if [ "$major_version" -ge 8 ]; then
@@ -49,7 +50,7 @@ else
 fi
 # Setup MOTD
 motd='/etc/motd'
-motd_first_row="CentOS ${os_version} Base"
+motd_first_row="${el_variant} ${os_version} Base"
 
 figlet -w 80 -c -f slant "${motd_first_row}" > $motd || exit 1
 figlet -w 80 -c -f slant "by ${vagrant_user}" >> $motd || exit 1

@@ -1,5 +1,5 @@
 {
     "os": "centos-7",
-    "common_scripts": "../centos-common/scripts"
+    "common_scripts": "../el-common/scripts"
 }
 

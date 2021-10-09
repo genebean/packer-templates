@@ -1,13 +1,13 @@
 {
-  "os": "centos-7",
-  "iso_url": "http://ftp.osuosl.org/pub/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-2003.iso",
-  "iso_checksum": "659691c28a0e672558b003d223f83938f254b39875ee7559d1a4a14c79173193",
+  "os": "almalinux-8",
+  "iso_url": "http://atl.mirrors.clouvider.net/almalinux/8/isos/x86_64/AlmaLinux-8.4-x86_64-minimal.iso",
+  "iso_checksum": "b4572a1bf791ed8e7469d6ab0beece1d1eacc5ab39bb8b8f4bf78111a20b5c23",
   "iso_checksum_type": "sha256",
   "boot_command_start": "<tab><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><wait5>",
   "boot_command_options": " biosdevname=0 net.ifnames=0 quiet vga=791",
   "common_scripts": "../el-common/scripts",
   "vagrant_guest_os_type": "RedHat_64",
-  "vmware_guest_os_type": "centos7-64",
+  "vmware_guest_os_type": "centos8-64",
   "vmware_hardware_version": "14"
 }
 
