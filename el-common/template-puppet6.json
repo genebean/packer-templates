@@ -86,7 +86,7 @@
     }
   ],
   "variables": {
-    "build_name": "puppet5",
+    "build_name": "puppet6",
     "common_scripts": "scripts"
   }
 }

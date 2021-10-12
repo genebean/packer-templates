@@ -21,4 +21,4 @@ case "$1" in
     exit 1
 esac
 
-../centos-common/build.sh $builder 6
+../el-common/build.sh $builder almalinux 8

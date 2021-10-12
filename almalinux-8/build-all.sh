@@ -6,4 +6,4 @@ cd $DIR
 rm -f boxes/*
 rm -rf output-*
 
-../centos-common/build-all.sh 6
+../el-common/build-all.sh almalinux 8

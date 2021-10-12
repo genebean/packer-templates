@@ -2,18 +2,28 @@
 
 DIR="$(cd "$(dirname "$0")" && pwd -P)"
 
-if [ "$#" -ne 1 ]; then
-  echo "usage: $0 [6|7|8]"
+if [ "$#" -ne 2 ]; then
+  echo "usage: $0 [almalinux|centos] [7|8]"
   exit 1
 fi
 
 case "$1" in
-  6|7|8 )
+  almalinux|centos )
     # this is the first part of each box's name
-    box_prefix="centos-${1}"
+    el_version="${1}"
     ;;
   * )
-    echo "The only os versions that are currently supported are 6, 7, and 8."
+    echo "The only el variants that are currently supported are AlmaLinux and CentOS."
+    exit 1
+esac
+
+case "$2" in
+  7|8 )
+    # this is the first part of each box's name
+    box_prefix="${el_version}-${2}"
+    ;;
+  * )
+    echo "The only os versions that are currently supported are 7 & 8."
     exit 1
 esac
 

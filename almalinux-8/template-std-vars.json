@@ -1,5 +1,5 @@
 {
-    "os": "centos-8",
+    "os": "almalinux-8",
     "common_scripts": "../el-common/scripts"
 }
 

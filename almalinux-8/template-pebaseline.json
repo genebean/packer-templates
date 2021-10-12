@@ -1,0 +1,50 @@
+{
+  "variables": {
+    "os": "centos-8",
+    "build_name": "pebaseline",
+    "packer_puppetmaster": "{{env `PACKER_PUPPETMASTER`}}",
+    "common_scripts": "scripts"
+  },
+  "builders": [
+    {
+      "name": "vmware-vagrant-{{user `build_name`}}-{{user `os`}}",
+      "type": "vmware-vmx",
+      "vm_name": "packer-vmware-{{user `build_name`}}-{{user `os`}}",
+      "headless": true,
+      "source_path": "output-vmware-base-{{user `os`}}/packer-vmware-base-{{user `os`}}.vmx",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo '/sbin/halt -h -p' > /tmp/shutdown.sh; echo 'vagrant'|sudo -S sh '/tmp/shutdown.sh'"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "environment_vars": [
+        "PACKER_PUPPETMASTER={{user `packer_puppetmaster`}}"
+      ],
+      "scripts": [
+        "scripts/{{user `build_name`}}.sh",
+        "scripts/sshd_config.sh",
+        "{{user `common_scripts`}}/cleanup.sh"
+      ],
+      "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "{{user `common_scripts`}}/zerodisk.sh"
+      ],
+      "execute_command": "echo 'vagrant'|{{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "keep_input_artifact": true,
+      "output": "boxes/{{user `os`}}-{{user `build_name`}}-vmware.box"
+    }
+  ]
+}
